@@ -1,34 +1,7 @@
 import React from "react";
 import { Thesis } from "../types/thesis";
 import { POPULAR_TOPICS, CATEGORIES_LIST } from "../data/thesesData";
-import { ThesisCard } from "../components/ThesisCard";
-import {
-  Sparkles,
-  Search,
-  Dices,
-  FileText,
-  Flame,
-  ArrowRight,
-  BarChart3,
-  Globe,
-  GraduationCap,
-  Building2,
-  BookOpen,
-  Shuffle,
-  CheckCircle2,
-  Code,
-  Cpu,
-  Compass,
-  Landmark,
-  TrendingUp,
-  Activity,
-  Brain,
-  Users,
-  Scale,
-  Leaf,
-  Briefcase,
-  Binary
-} from "lucide-react";
+import { ArrowRight, BookOpen, Bookmark, FileSearch, Lightbulb, Search, Sparkles } from "lucide-react";
 
 interface LandingPageProps {
   rareTheses: Thesis[];
@@ -49,143 +22,65 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   onSearchTopic,
   onSearchCategory,
   setActiveTab,
-  savedIds,
-  comparedIds,
-  onToggleSave,
-  onToggleCompare,
-  onSelectDetails,
-  onBuildProposal,
-  onCite,
 }) => {
-  const [heroSearchInput, setHeroSearchInput] = React.useState("");
+  const [query, setQuery] = React.useState("");
+  const featuredTopics = POPULAR_TOPICS.slice(0, 6);
+  const featuredCategories = CATEGORIES_LIST.slice(0, 8);
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (heroSearchInput.trim()) {
-      onSearchTopic(heroSearchInput.trim());
-      setActiveTab("search");
-    }
-  };
-
-  const handleSurpriseMe = () => {
-    const randomTopics = [
-      "Gothic Urban Literature",
-      "Post-Colonial Narrative Mechanics",
-      "Comparative Allegory in Devotional Poetry",
-      "Ecocriticism & Environmental Memory",
-      "Digital Humanities & Stylometry",
-      "Feminist Epistolary Rhetoric",
-      "Oral History & Dialect Linguistics",
-      "Epistemology of Silence & Traumatic Memory",
-      "Public Policy & Cultural Heritage Preservation"
-    ];
-    const picked = randomTopics[Math.floor(Math.random() * randomTopics.length)];
-    onSearchTopic(picked);
+  const openSearch = (value: string) => {
+    const clean = value.trim();
+    if (!clean) return;
+    onSearchTopic(clean);
     setActiveTab("search");
   };
 
-  const rareOfTheDay = rareTheses[0];
-
-  // Icon map for categories
-  const getCategoryIcon = (iconName: string) => {
-    switch (iconName) {
-      case "Code": return <Code className="w-5 h-5" />;
-      case "Cpu": return <Cpu className="w-5 h-5" />;
-      case "BookOpen": return <BookOpen className="w-5 h-5" />;
-      case "MessageSquare": return <BookOpen className="w-5 h-5" />;
-      case "Compass": return <Compass className="w-5 h-5" />;
-      case "Landmark": return <Landmark className="w-5 h-5" />;
-      case "TrendingUp": return <TrendingUp className="w-5 h-5" />;
-      case "GraduationCap": return <GraduationCap className="w-5 h-5" />;
-      case "Activity": return <Activity className="w-5 h-5" />;
-      case "Brain": return <Brain className="w-5 h-5" />;
-      case "Users": return <Users className="w-5 h-5" />;
-      case "Sparkles": return <Sparkles className="w-5 h-5" />;
-      case "Scale": return <Scale className="w-5 h-5" />;
-      case "Leaf": return <Leaf className="w-5 h-5" />;
-      case "Briefcase": return <Briefcase className="w-5 h-5" />;
-      case "Binary": return <Binary className="w-5 h-5" />;
-      default: return <BookOpen className="w-5 h-5" />;
-    }
+  const submitSearch = (event: React.FormEvent) => {
+    event.preventDefault();
+    openSearch(query);
   };
 
   return (
-    <div className="space-y-16 pb-12">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-indigo-950 via-slate-900 to-slate-950 text-white p-8 sm:p-12 md:p-16 border border-slate-800 shadow-2xl">
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="space-y-20 pb-16">
+      <section className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white px-6 py-14 dark:border-slate-800 dark:bg-slate-950 sm:px-10 sm:py-20 lg:px-16">
+        <div className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full bg-[var(--tv-accent-soft)] opacity-70 dark:opacity-30" />
+        <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-[var(--tv-accent-soft)] opacity-50 dark:opacity-20" />
 
-        <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold backdrop-blur-md">
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>AI-Powered Academic Research & Thesis Discovery</span>
+        <div className="relative mx-auto max-w-4xl text-center">
+          <div className="mx-auto mb-7 inline-flex items-center gap-2 rounded-full border border-[var(--tv-border-strong)] bg-[var(--tv-accent-soft)] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]">
+            <Sparkles className="h-3.5 w-3.5" /> Research discovery platform
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-            Discover <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-amber-300 to-violet-400">Unresearched Gaps</span> & Hidden Academic Gems
+          <h1 className="mx-auto max-w-4xl font-serif text-4xl font-semibold leading-[1.08] tracking-tight text-[var(--tv-heading)] sm:text-6xl lg:text-7xl">
+            Find the question
+            <span className="block text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]">worth researching.</span>
           </h1>
 
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            Search thousands of verified dissertations, calculate instant AI novelty scores, discover rare interdisciplinary thesis topics, and convert research gaps into full proposals.
+          <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-[var(--tv-muted)] sm:text-base">
+            Explore existing research, understand what has already been studied, uncover promising gaps, and turn a rough idea into a researchable topic.
           </p>
 
-          {/* Main Search Bar */}
-          <form onSubmit={handleSearchSubmit} className="pt-2 max-w-2xl mx-auto">
-            <div className="relative flex items-center bg-slate-900/90 border border-slate-700/80 rounded-2xl p-2 shadow-2xl focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
-              <Search className="w-5 h-5 text-slate-400 ml-3 shrink-0" />
-              <input
-                type="text"
-                value={heroSearchInput}
-                onChange={(e) => setHeroSearchInput(e.target.value)}
-                placeholder="Search thesis title, subject, university, or DOI..."
-                className="w-full bg-transparent border-0 px-3 py-2 text-sm text-white placeholder-slate-400 focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition-colors shrink-0 flex items-center gap-1.5"
-              >
-                Search Research
+          <form onSubmit={submitSearch} className="mx-auto mt-9 max-w-3xl">
+            <div className="flex flex-col gap-2 rounded-2xl border border-[var(--tv-border-strong)] bg-[var(--tv-surface-soft)] p-2 shadow-sm transition focus-within:border-[var(--tv-accent)] focus-within:ring-4 focus-within:ring-[var(--tv-accent)]/10 sm:flex-row">
+              <div className="flex min-w-0 flex-1 items-center px-3">
+                <Search className="mr-3 h-5 w-5 shrink-0 text-[var(--tv-muted)]" />
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="What are you interested in researching?"
+                  aria-label="Research topic"
+                  className="w-full bg-transparent py-3 text-sm text-[var(--tv-text)] outline-none placeholder:text-[var(--tv-muted)]"
+                />
+              </div>
+              <button type="submit" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--tv-accent-dark)] px-6 text-sm font-semibold text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--tv-accent)] focus:ring-offset-2 dark:bg-[var(--tv-accent)] dark:text-[var(--tv-on-accent)]">
+                Explore research <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </form>
 
-          {/* Quick Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <button
-              onClick={() => setActiveTab("search")}
-              className="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition-colors flex items-center gap-2"
-            >
-              <Search className="w-4 h-4 text-indigo-400" /> Search Existing Research
-            </button>
-
-            <button
-              onClick={() => setActiveTab("rare")}
-              className="px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-bold border border-amber-500/30 transition-colors flex items-center gap-2"
-            >
-              <Dices className="w-4 h-4 text-amber-400" /> 🎲 Discover Rare Thesis
-            </button>
-
-            <button
-              onClick={handleSurpriseMe}
-              className="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition-colors flex items-center gap-2"
-            >
-              <Shuffle className="w-4 h-4 text-violet-400" /> Surprise Me
-            </button>
-          </div>
-
-          {/* Trending Topics */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400">
-            <span className="font-semibold text-slate-300 text-[11px] uppercase tracking-wider">Trending:</span>
-            {POPULAR_TOPICS.slice(0, 6).map((topic, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  onSearchTopic(topic);
-                  setActiveTab("search");
-                }}
-                className="px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 transition-colors text-xs"
-              >
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-[var(--tv-muted)]">
+            <span className="mr-1 font-medium">Try:</span>
+            {featuredTopics.slice(0, 4).map((topic) => (
+              <button key={topic} onClick={() => openSearch(topic)} className="rounded-full border border-[var(--tv-border)] bg-[var(--tv-surface)] px-3 py-1.5 transition hover:border-[var(--tv-accent)] hover:text-[var(--tv-accent-dark)] dark:hover:text-[var(--tv-accent)]">
                 {topic}
               </button>
             ))}
@@ -193,222 +88,79 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       </section>
 
-      {/* Rare Thesis of the Day (Mock Banner) */}
-      {rareOfTheDay && (
-        <section className="relative rounded-3xl bg-gradient-to-r from-amber-950/40 via-slate-900 to-indigo-950/40 border border-amber-500/30 p-6 sm:p-8 backdrop-blur-md shadow-xl">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            <div className="space-y-3 flex-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold">
-                <Flame className="w-4 h-4" /> Rare Thesis of the Day
+      <section className="mx-auto max-w-6xl">
+        <div className="grid gap-4 md:grid-cols-3">
+          {[
+            { icon: FileSearch, title: "Explore the literature", text: "Search papers, theses and research around the subject you care about." },
+            { icon: Lightbulb, title: "Spot opportunities", text: "Compare established and emerging areas to identify promising directions." },
+            { icon: Bookmark, title: "Build your research", text: "Save useful work and develop promising ideas into a structured plan." },
+          ].map(({ icon: Icon, title, text }) => (
+            <div key={title} className="rounded-2xl border border-[var(--tv-border)] bg-[var(--tv-surface)] p-6">
+              <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--tv-accent-soft)] text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]">
+                <Icon className="h-5 w-5" />
               </div>
-
-              <h2 className="text-xl sm:text-2xl font-bold text-white leading-snug">
-                "{rareOfTheDay.title}"
-              </h2>
-
-              <p className="text-slate-300 text-xs sm:text-sm line-clamp-2 leading-relaxed">
-                {rareOfTheDay.abstract}
-              </p>
-
-              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
-                <span className="font-semibold text-slate-300">{rareOfTheDay.university}</span>
-                <span>•</span>
-                <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">
-                  Novelty Score: {rareOfTheDay.noveltyScore}%
-                </span>
-                <span>•</span>
-                <span className="text-indigo-300">{rareOfTheDay.subject}</span>
-              </div>
+              <h2 className="font-serif text-xl font-semibold text-[var(--tv-heading)]">{title}</h2>
+              <p className="mt-2 text-sm leading-6 text-[var(--tv-muted)]">{text}</p>
             </div>
+          ))}
+        </div>
+      </section>
 
-            <div className="shrink-0 flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-              <button
-                onClick={() => onSelectDetails(rareOfTheDay)}
-                className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition-colors flex items-center justify-center gap-2 shadow-md"
-              >
-                Inspect Abstract & Gap
+      <section>
+        <div className="mb-7 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]">Start somewhere</p>
+            <h2 className="mt-2 font-serif text-3xl font-semibold text-[var(--tv-heading)]">Explore research areas</h2>
+            <p className="mt-2 max-w-xl text-sm text-[var(--tv-muted)]">Choose a field to browse its literature and discover directions worth investigating.</p>
+          </div>
+          <button onClick={() => setActiveTab("search")} className="hidden items-center gap-1 text-sm font-semibold text-[var(--tv-accent-dark)] hover:opacity-80 dark:text-[var(--tv-accent)] sm:flex">
+            View all <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {featuredCategories.map((category) => (
+            <button key={category.name} onClick={() => openSearch(category.name)} className="group flex min-h-28 flex-col justify-between rounded-2xl border border-[var(--tv-border)] bg-[var(--tv-surface)] p-4 text-left transition hover:-translate-y-0.5 hover:border-[var(--tv-accent)] hover:shadow-sm">
+              <BookOpen className="h-5 w-5 text-[var(--tv-accent-dark)] transition group-hover:scale-105 dark:text-[var(--tv-accent)]" />
+              <span>
+                <span className="block text-sm font-semibold text-[var(--tv-heading)]">{category.name}</span>
+                <span className="mt-1 block text-xs text-[var(--tv-muted)]">{category.count.toLocaleString()} indexed</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="rounded-[2rem] border border-[var(--tv-border-strong)] bg-[var(--tv-accent-soft)] p-7 sm:p-10">
+        <div className="grid items-center gap-8 lg:grid-cols-[1fr_auto]">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]">From idea to direction</p>
+            <h2 className="mt-2 max-w-2xl font-serif text-3xl font-semibold text-[var(--tv-heading)] sm:text-4xl">Don't start with a blank page.</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--tv-muted)]">Start with a subject. ThesisVerse helps you understand the landscape before you commit to a question.</p>
+          </div>
+          <button onClick={() => setActiveTab("search")} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--tv-accent-dark)] px-6 text-sm font-semibold text-white transition hover:opacity-90 dark:bg-[var(--tv-accent)] dark:text-[var(--tv-on-accent)]">
+            Start exploring <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      </section>
+
+      {rareTheses.length > 0 && (
+        <section>
+          <div className="mb-6">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]">Curated discovery</p>
+            <h2 className="mt-2 font-serif text-3xl font-semibold text-[var(--tv-heading)]">A few directions to spark ideas</h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {rareTheses.slice(0, 3).map((thesis) => (
+              <button key={thesis.id} onClick={() => openSearch(thesis.subject)} className="rounded-2xl border border-[var(--tv-border)] bg-[var(--tv-surface)] p-6 text-left transition hover:border-[var(--tv-accent)] hover:shadow-sm">
+                <span className="text-xs font-semibold text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]">{thesis.subject}</span>
+                <h3 className="mt-3 font-serif text-lg font-semibold leading-snug text-[var(--tv-heading)]">{thesis.title}</h3>
+                <span className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-[var(--tv-muted)]">Explore this area <ArrowRight className="h-3.5 w-3.5" /></span>
               </button>
-              <button
-                onClick={() => onBuildProposal(rareOfTheDay)}
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-colors flex items-center justify-center gap-2 shadow-md"
-              >
-                <FileText className="w-4 h-4" /> Build Proposal
-              </button>
-            </div>
+            ))}
           </div>
         </section>
       )}
-
-      {/* Featured Research Categories (All 16 Categories) */}
-      <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-              Featured Research Categories
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Explore open access dissertations across 16 academic disciplines
-            </p>
-          </div>
-
-          <button
-            onClick={() => setActiveTab("search")}
-            className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
-          >
-            All Categories <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {CATEGORIES_LIST.map((cat, idx) => (
-            <div
-              key={idx}
-              onClick={() => {
-                onSearchCategory(cat.name);
-                setActiveTab("search");
-              }}
-              className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 hover:shadow-md transition-all cursor-pointer group flex items-center gap-3"
-            >
-              <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
-                {getCategoryIcon(cat.icon)}
-              </div>
-              <div className="overflow-hidden">
-                <h3 className="font-bold text-xs text-slate-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                  {cat.name}
-                </h3>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                  {cat.count.toLocaleString()} theses
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Statistics Section */}
-      <section className="p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white border border-slate-800 shadow-xl space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold">Global Academic Metrics</h2>
-          <p className="text-xs text-slate-400">Indexed & verified across top research university repositories</p>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div className="space-y-1">
-            <p className="text-3xl sm:text-4xl font-black text-indigo-400">48,200+</p>
-            <p className="text-xs text-slate-300 font-semibold">Dissertations Indexed</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-3xl sm:text-4xl font-black text-amber-400">1,250+</p>
-            <p className="text-xs text-slate-300 font-semibold">Partner Universities</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-3xl sm:text-4xl font-black text-emerald-400">92.4%</p>
-            <p className="text-xs text-slate-300 font-semibold">Avg Novelty Precision</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-3xl sm:text-4xl font-black text-violet-400">100%</p>
-            <p className="text-xs text-slate-300 font-semibold">Open Access Metadata</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Core Platform Capabilities Grid */}
-      <section className="space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-            Comprehensive Academic Research Ecosystem
-          </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-lg mx-auto">
-            Built specifically for graduate students, researchers, and university faculties.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div
-            onClick={() => setActiveTab("search")}
-            className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 transition-all cursor-pointer group shadow-sm"
-          >
-            <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Search className="w-6 h-6" />
-            </div>
-            <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 flex items-center justify-between">
-              Academic Search Engine
-              <ArrowRight className="w-4 h-4 text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Full-text search across thousands of verified thesis records with DOI filters, university rankings, and novelty thresholds.
-            </p>
-          </div>
-
-          <div
-            onClick={() => setActiveTab("proposal")}
-            className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 transition-all cursor-pointer group shadow-sm"
-          >
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <FileText className="w-6 h-6" />
-            </div>
-            <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 flex items-center justify-between">
-              AI Proposal Builder
-              <ArrowRight className="w-4 h-4 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Convert any research topic or gap into a structured 5-chapter research proposal with problem statements, questions, and APA references.
-            </p>
-          </div>
-
-          <div
-            onClick={() => setActiveTab("compare")}
-            className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 transition-all cursor-pointer group shadow-sm"
-          >
-            <div className="w-12 h-12 rounded-xl bg-violet-50 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <BarChart3 className="w-6 h-6" />
-            </div>
-            <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 flex items-center justify-between">
-              Paper Comparison Matrix
-              <ArrowRight className="w-4 h-4 text-violet-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Side-by-side comparative analysis of methodologies, sample sizes, empirical findings, and literature research gaps.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Rare Hidden Gems Showcase */}
-      <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-xs font-bold text-amber-500 uppercase tracking-wider flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5" /> High Novelty Gems
-            </span>
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-              Featured Rare & Unresearched Topics
-            </h2>
-          </div>
-          <button
-            onClick={() => setActiveTab("rare")}
-            className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
-          >
-            Discover More <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {rareTheses.map((thesis) => (
-            <ThesisCard
-              key={thesis.id}
-              thesis={thesis}
-              isSaved={savedIds.has(thesis.id)}
-              isCompared={comparedIds.has(thesis.id)}
-              onToggleSave={onToggleSave}
-              onToggleCompare={onToggleCompare}
-              onSelectDetails={onSelectDetails}
-              onBuildProposal={onBuildProposal}
-              onCite={onCite}
-            />
-          ))}
-        </div>
-      </section>
     </div>
   );
 };
