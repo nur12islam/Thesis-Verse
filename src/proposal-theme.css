@@ -1,28 +1,31 @@
 /* ThesisVerse proposal workspace — calm academic/editorial layer */
-.proposal-workspace, .proposal-workspace * { box-sizing: border-box; }
+.proposal-workspace, .proposal-workspace *, .proposal-page, .proposal-page * { box-sizing: border-box; }
 
-/* This stylesheet intentionally keys off proposal-specific text/classes where possible,
-   while using theme variables so light/dark remain consistent with the rest of ThesisVerse. */
-.proposal-workspace {
-  color: var(--tv-text);
-}
+/* Proposal-specific overrides stay on the existing ThesisVerse theme variables. */
+.proposal-workspace, .proposal-page { color: var(--tv-text); }
 
 .proposal-workspace h1,
 .proposal-workspace h2,
 .proposal-workspace h3,
-.proposal-workspace h4 {
+.proposal-workspace h4,
+.proposal-page h1,
+.proposal-page h2,
+.proposal-page h3,
+.proposal-page h4 {
   font-family: Georgia, "Times New Roman", serif !important;
   color: var(--tv-heading) !important;
   letter-spacing: -.02em;
 }
 
-.proposal-workspace > div:first-child {
-  padding-bottom: 2px;
-}
+.proposal-workspace > div:first-child,
+.proposal-page > div:first-child { padding-bottom: 2px; }
 
 .proposal-workspace textarea,
 .proposal-workspace input,
-.proposal-workspace select {
+.proposal-workspace select,
+.proposal-page textarea,
+.proposal-page input,
+.proposal-page select {
   border-color: var(--tv-border) !important;
   background: var(--tv-surface-soft) !important;
   color: var(--tv-text) !important;
@@ -31,81 +34,88 @@
 
 .proposal-workspace textarea:focus,
 .proposal-workspace input:focus,
-.proposal-workspace select:focus {
+.proposal-workspace select:focus,
+.proposal-page textarea:focus,
+.proposal-page input:focus,
+.proposal-page select:focus {
   border-color: var(--tv-accent) !important;
   outline: none !important;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--tv-accent) 12%, transparent) !important;
 }
 
-.proposal-workspace > .proposal-generator {
+.proposal-workspace .proposal-generator,
+.proposal-page .proposal-generator {
   background: var(--tv-surface) !important;
   border: 1px solid var(--tv-border) !important;
   border-radius: 22px !important;
   box-shadow: 0 10px 30px rgba(20,28,18,.045) !important;
 }
 
-.proposal-workspace .proposal-primary-action {
+.proposal-workspace .proposal-primary-action,
+.proposal-page .proposal-primary-action {
   background: var(--tv-accent) !important;
   color: var(--tv-on-accent) !important;
   border-color: var(--tv-accent) !important;
   box-shadow: none !important;
 }
 
-.proposal-workspace .proposal-primary-action:hover {
+.proposal-workspace .proposal-primary-action:hover,
+.proposal-page .proposal-primary-action:hover {
   background: var(--tv-accent-dark) !important;
   transform: translateY(-1px);
 }
 
-.proposal-workspace .proposal-panel {
+.proposal-workspace .proposal-panel,
+.proposal-page .proposal-panel {
   background: var(--tv-surface) !important;
   border: 1px solid var(--tv-border) !important;
   border-radius: 18px !important;
   box-shadow: 0 7px 24px rgba(20,28,18,.04) !important;
 }
 
-.proposal-workspace .proposal-active {
+.proposal-workspace .proposal-active,
+.proposal-page .proposal-active {
   background: var(--tv-accent) !important;
   color: var(--tv-on-accent) !important;
   border-color: var(--tv-accent) !important;
 }
 
-.proposal-workspace .proposal-muted-action {
+.proposal-workspace .proposal-muted-action,
+.proposal-page .proposal-muted-action {
   background: var(--tv-surface-soft) !important;
   color: var(--tv-text) !important;
   border: 1px solid var(--tv-border) !important;
 }
 
-.proposal-workspace .proposal-progress {
-  background: var(--tv-accent) !important;
-}
+.proposal-workspace .proposal-progress,
+.proposal-page .proposal-progress { background: var(--tv-accent) !important; }
 
-.proposal-workspace .proposal-section-number {
+.proposal-workspace .proposal-section-number,
+.proposal-page .proposal-section-number {
   background: var(--tv-accent-soft) !important;
   color: var(--tv-accent-dark) !important;
   border: 1px solid var(--tv-border) !important;
 }
 
-.dark .proposal-workspace .proposal-section-number {
-  color: var(--tv-accent) !important;
-}
+.dark .proposal-workspace .proposal-section-number,
+.dark .proposal-page .proposal-section-number { color: var(--tv-accent) !important; }
 
 @media (max-width: 1024px) {
-  .proposal-workspace .proposal-sticky {
-    position: static !important;
-  }
+  .proposal-workspace .proposal-sticky,
+  .proposal-page .proposal-sticky { position: static !important; }
 }
 
 @media (max-width: 640px) {
-  .proposal-workspace {
-    padding-bottom: 32px;
-  }
+  .proposal-workspace,
+  .proposal-page { padding-bottom: 32px; }
   .proposal-workspace .proposal-generator,
-  .proposal-workspace .proposal-panel {
-    border-radius: 16px !important;
-  }
+  .proposal-workspace .proposal-panel,
+  .proposal-page .proposal-generator,
+  .proposal-page .proposal-panel { border-radius: 16px !important; }
   .proposal-workspace textarea,
   .proposal-workspace input,
-  .proposal-workspace select {
-    min-height: 46px;
-  }
+  .proposal-workspace select,
+  .proposal-page textarea,
+  .proposal-page input,
+  .proposal-page select { min-height: 46px; }
 }
