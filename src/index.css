@@ -41,5 +41,21 @@ main > div > .space-y-8 .rounded-2xl{box-shadow:none}
 main > div > .space-y-8 [class*="bg-indigo-"]{background:var(--tv-accent-soft)!important}
 main > div > .space-y-8 [class*="bg-gradient-"]{background:var(--tv-surface)!important}
 main > div > .space-y-8 .animate-spin{color:var(--tv-accent)!important}
-@media(max-width:768px){main > div > .space-y-8{padding-left:4px;padding-right:4px}main > div > .space-y-8 > div:first-child h1{font-size:1.65rem!important}main > div > .space-y-8 > div:nth-child(2){border-radius:16px!important}main > div > .space-y-8 > div:nth-child(2) input{min-height:50px!important}}
+
+/* Paper analysis modal */
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl{background:var(--tv-surface)!important;border:1px solid var(--tv-border)!important;border-radius:22px!important;box-shadow:0 24px 70px rgba(14,18,14,.18)!important}
+.dark .fixed.inset-0.z-50 > .relative.w-full.max-w-4xl{background:#151b15!important;border-color:#394238!important;box-shadow:0 26px 80px rgba(0,0,0,.42)!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:first-child{background:var(--tv-surface)!important;border-color:var(--tv-border)!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:first-child h2{font-family:Georgia,"Times New Roman",serif!important;font-size:clamp(1.25rem,2vw,1.65rem)!important;font-weight:600!important;letter-spacing:-.02em!important;color:var(--tv-heading)!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2){background:var(--tv-surface)!important;border-color:var(--tv-border)!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button{color:var(--tv-muted)!important;border-color:transparent!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button:hover{color:var(--tv-text)!important;background:var(--tv-surface-soft)!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button[class*="border-indigo-"],.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button[class*="border-amber-"],.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button[class*="border-violet-"]{border-bottom-color:var(--tv-accent)!important;color:var(--tv-accent-dark)!important}
+.dark .fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button[class*="border-indigo-"],.dark .fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button[class*="border-amber-"],.dark .fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button[class*="border-violet-"]{color:var(--tv-accent)!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3){background:var(--tv-surface)!important;color:var(--tv-text)!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3) h3{font-family:Georgia,"Times New Roman",serif!important;color:var(--tv-heading)!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3) .rounded-xl{border-color:var(--tv-border)!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3) .bg-slate-50,.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3) .bg-slate-100{background:var(--tv-surface-soft)!important}
+.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl a{color:var(--tv-accent-dark)!important}.dark .fixed.inset-0.z-50 > .relative.w-full.max-w-4xl a{color:var(--tv-accent)!important}
+@media(max-width:768px){main > div > .space-y-8{padding-left:4px;padding-right:4px}main > div > .space-y-8 > div:first-child h1{font-size:1.65rem!important}main > div > .space-y-8 > div:nth-child(2){border-radius:16px!important}main > div > .space-y-8 > div:nth-child(2) input{min-height:50px!important}.fixed.inset-0.z-50{padding:0!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl{max-height:100dvh!important;height:100dvh!important;border-radius:0!important;border-left:0!important;border-right:0!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:first-child{padding:16px!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2){padding-left:8px!important;padding-right:8px!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button{padding-left:10px!important;padding-right:10px!important;white-space:nowrap}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3){padding:20px!important}}
 @media(max-width:640px){main > .space-y-16 > section:first-child{border-radius:22px!important}}
