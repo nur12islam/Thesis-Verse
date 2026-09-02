@@ -1,0 +1,23 @@
+/* Small accessibility + mobile ergonomics layer. */
+:where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--tv-accent) !important;
+  outline-offset: 3px;
+}
+
+button, a { touch-action: manipulation; }
+
+@media (max-width: 640px) {
+  button:not([aria-hidden="true"]),
+  [role="button"] {
+    min-height: 42px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
