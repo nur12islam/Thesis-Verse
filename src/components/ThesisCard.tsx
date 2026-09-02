@@ -2,21 +2,20 @@ import React, { useState } from "react";
 import { Thesis, SimplifiedAbstract, PaperEndorsement } from "../types/thesis";
 import { simplifyAbstract, translateText } from "../services/api";
 import {
-  Sparkles,
   Bookmark,
   BookmarkCheck,
-  FileText,
-  Quote,
-  Flame,
+  Bot,
+  Check,
   CheckSquare,
-  Square,
   ExternalLink,
+  FileText,
+  Flame,
   GraduationCap,
   Languages,
-  Bot,
   Loader2,
-  Check,
-  RotateCcw
+  Quote,
+  Sparkles,
+  Square,
 } from "lucide-react";
 
 interface ThesisCardProps {
@@ -30,6 +29,20 @@ interface ThesisCardProps {
   onBuildProposal: (thesis: Thesis) => void;
   onCite: (thesis: Thesis) => void;
 }
+
+const LANGUAGES = [
+  "Original",
+  "Spanish",
+  "French",
+  "German",
+  "Chinese",
+  "Japanese",
+  "Arabic",
+  "Hindi",
+  "Portuguese",
+];
+
+const clampScore = (value: number) => Math.max(0, Math.min(100, value));
 
 export const ThesisCard: React.FC<ThesisCardProps> = ({
   thesis,
@@ -45,20 +58,16 @@ export const ThesisCard: React.FC<ThesisCardProps> = ({
   const [isSimplified, setIsSimplified] = useState(false);
   const [simplifiedData, setSimplifiedData] = useState<SimplifiedAbstract | null>(null);
   const [isSimplifying, setIsSimplifying] = useState(false);
-
-  const [selectedLang, setSelectedLang] = useState<string>("Original");
+  const [selectedLang, setSelectedLang] = useState("Original");
   const [translatedTitle, setTranslatedTitle] = useState<string | null>(null);
   const [translatedAbstract, setTranslatedAbstract] = useState<string | null>(null);
   const [isTranslating, setIsTranslating] = useState(false);
-
-  const LANGUAGES = ["Original", "Spanish", "French", "German", "Chinese", "Japanese", "Arabic", "Hindi", "Portuguese"];
 
   const handleToggleSimplify = async () => {
     if (isSimplified) {
       setIsSimplified(false);
       return;
     }
-
     if (simplifiedData) {
       setIsSimplified(true);
       return;
@@ -86,8 +95,10 @@ export const ThesisCard: React.FC<ThesisCardProps> = ({
 
     setIsTranslating(true);
     try {
-      const titleRes = await translateText(thesis.title, lang, "title");
-      const abstractRes = await translateText(thesis.abstract, lang, "abstract");
+      const [titleRes, abstractRes] = await Promise.all([
+        translateText(thesis.title, lang, "title"),
+        translateText(thesis.abstract, lang, "abstract"),
+      ]);
       setTranslatedTitle(titleRes.translatedText);
       setTranslatedAbstract(abstractRes.translatedText);
     } catch (err) {
@@ -98,217 +109,220 @@ export const ThesisCard: React.FC<ThesisCardProps> = ({
   };
 
   const displayTitle = translatedTitle || thesis.title;
-  const displayAbstract = translatedAbstract || (isSimplified && simplifiedData ? simplifiedData.simplifiedAbstract : thesis.abstract);
+  const displayAbstract =
+    translatedAbstract ||
+    (isSimplified && simplifiedData ? simplifiedData.simplifiedAbstract : thesis.abstract);
+  const novelty = clampScore(thesis.noveltyScore);
+  const confidence = clampScore(thesis.confidenceScore);
 
   return (
-    <div
-      className={`group relative rounded-2xl border transition-all duration-300 p-5 sm:p-6 backdrop-blur-md flex flex-col justify-between ${
-        thesis.isRare
-          ? "bg-gradient-to-br from-amber-950/10 via-slate-900/90 to-indigo-950/20 border-amber-500/30 shadow-lg shadow-amber-500/5 hover:border-amber-500/60"
-          : "bg-white/80 dark:bg-slate-900/80 border-slate-200/80 dark:border-slate-800 hover:border-indigo-500/50 dark:hover:border-indigo-500/50 shadow-sm hover:shadow-md"
+    <article
+      className={`group flex h-full flex-col overflow-hidden rounded-2xl border bg-[var(--tv-surface)] transition-all duration-200 ${
+        isCompared
+          ? "border-[var(--tv-accent)] shadow-[0_0_0_2px_var(--tv-accent-soft)]"
+          : "border-[var(--tv-border)] hover:-translate-y-0.5 hover:border-[var(--tv-border-strong)] hover:shadow-lg"
       }`}
     >
-      <div>
-        {/* Header badges */}
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-          <div className="flex flex-wrap items-center gap-2">
+      <div className="flex-1 p-5 sm:p-6">
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
             {thesis.isRare && (
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center gap-1">
-                <Flame className="w-3 h-3 text-amber-500" /> Hidden Gem
+              <span className="inline-flex items-center gap-1 rounded-full border border-[var(--tv-accent)] bg-[var(--tv-accent-soft)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]">
+                <Flame className="h-3 w-3" /> Underexplored
               </span>
             )}
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60">
+            <span className="rounded-full bg-[var(--tv-surface-soft)] px-2.5 py-1 text-[11px] font-semibold text-[var(--tv-text)]">
               {thesis.subject}
             </span>
-            <span className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center gap-1">
-              <GraduationCap className="w-3 h-3 text-slate-500" /> {thesis.degree}
-            </span>
+            {thesis.documentType && (
+              <span className="rounded-full border border-[var(--tv-border)] px-2.5 py-1 text-[10px] font-medium text-[var(--tv-muted)]">
+                {thesis.documentType}
+              </span>
+            )}
           </div>
 
-          {/* AI Agent Endorsements Badges */}
-          {agentEndorsements.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5 w-full pt-1">
-              {agentEndorsements.map((end, idx) => (
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={() => onToggleCompare(thesis)}
+              title={isCompared ? "Remove from comparison" : "Compare this paper"}
+              aria-label={isCompared ? "Remove from comparison" : "Compare this paper"}
+              className={`rounded-lg border p-2 transition-colors ${
+                isCompared
+                  ? "border-[var(--tv-accent)] bg-[var(--tv-accent)] text-[var(--tv-on-accent)]"
+                  : "border-transparent text-[var(--tv-muted)] hover:border-[var(--tv-border)] hover:bg-[var(--tv-surface-soft)] hover:text-[var(--tv-text)]"
+              }`}
+            >
+              {isCompared ? <CheckSquare className="h-4 w-4" /> : <Square className="h-4 w-4" />}
+            </button>
+            <button
+              type="button"
+              onClick={() => onToggleSave(thesis)}
+              title={isSaved ? "Remove from library" : "Save to library"}
+              aria-label={isSaved ? "Remove from library" : "Save to library"}
+              className={`rounded-lg border p-2 transition-colors ${
+                isSaved
+                  ? "border-[var(--tv-accent)] bg-[var(--tv-accent-soft)] text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]"
+                  : "border-transparent text-[var(--tv-muted)] hover:border-[var(--tv-border)] hover:bg-[var(--tv-surface-soft)] hover:text-[var(--tv-text)]"
+              }`}
+            >
+              {isSaved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => onSelectDetails(thesis)}
+          className="mb-2 block w-full text-left font-serif text-xl font-semibold leading-tight text-[var(--tv-heading)] transition-colors hover:text-[var(--tv-accent-dark)] dark:hover:text-[var(--tv-accent)]"
+        >
+          {displayTitle}
+        </button>
+
+        <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--tv-muted)]">
+          <span className="font-medium text-[var(--tv-text)]">{thesis.authors.join(", ")}</span>
+          <span aria-hidden="true">·</span>
+          <span>{thesis.university}</span>
+          <span aria-hidden="true">·</span>
+          <span>{thesis.year}</span>
+          <span aria-hidden="true">·</span>
+          <span className="inline-flex items-center gap-1">
+            <GraduationCap className="h-3.5 w-3.5" /> {thesis.degree}
+          </span>
+        </div>
+
+        {agentEndorsements.length > 0 && (
+          <div className="mb-4 rounded-xl border border-[var(--tv-border)] bg-[var(--tv-surface-soft)] p-3">
+            <div className="mb-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--tv-muted)]">
+              <Bot className="h-3.5 w-3.5" /> Multi-agent signal
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {agentEndorsements.slice(0, 3).map((end, idx) => (
                 <span
-                  key={idx}
+                  key={`${end.modelName}-${end.agentName}-${idx}`}
                   title={end.note}
-                  className="px-2 py-0.5 rounded-md text-[10px] font-extrabold flex items-center gap-1 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-slate-800/20 text-indigo-700 dark:text-indigo-300 border border-indigo-300/60 dark:border-indigo-700/60 shadow-2xs"
+                  className="rounded-md border border-[var(--tv-border)] bg-[var(--tv-surface)] px-2 py-1 text-[10px] font-semibold text-[var(--tv-text)]"
                 >
-                  <Bot className="w-3 h-3 text-indigo-500" />
-                  <span className="text-slate-900 dark:text-white font-black">{end.modelName}:</span>
-                  <span className="truncate max-w-[150px]">{end.agentName}</span>
+                  {end.modelName}: {end.agentName}
                 </span>
               ))}
             </div>
-          )}
-
-          {/* Compare & Save quick toggles */}
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => onToggleCompare(thesis)}
-              title={isCompared ? "Remove from comparison" : "Add to paper comparison"}
-              className={`p-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors ${
-                isCompared
-                  ? "bg-indigo-600 text-white"
-                  : "text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
-              }`}
-            >
-              {isCompared ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={() => onToggleSave(thesis)}
-              title={isSaved ? "Remove from library" : "Save to library"}
-              className={`p-1.5 rounded-lg transition-colors ${
-                isSaved
-                  ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950"
-                  : "text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800"
-              }`}
-            >
-              {isSaved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
-            </button>
           </div>
-        </div>
+        )}
 
-        {/* Title */}
-        <h3
-          onClick={() => onSelectDetails(thesis)}
-          className="text-lg font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors leading-snug mb-2"
-        >
-          {displayTitle}
-        </h3>
-
-        {/* University & Authors */}
-        <p className="text-xs text-slate-600 dark:text-slate-400 font-medium mb-3 flex items-center gap-2">
-          <span>{thesis.authors.join(", ")}</span>
-          <span>•</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-semibold">{thesis.university}</span>
-          <span>•</span>
-          <span>{thesis.year}</span>
-        </p>
-
-        {/* AI Action Toolbar for Card */}
-        <div className="flex items-center justify-between gap-2 mb-2 pt-1 pb-1 border-t border-b border-slate-100 dark:border-slate-800/60 text-[11px]">
-          {/* Simplify Button */}
+        <div className="mb-4 flex items-center justify-between gap-3 border-y border-[var(--tv-border)] py-2.5">
           <button
+            type="button"
             onClick={handleToggleSimplify}
             disabled={isSimplifying}
-            className={`px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1 transition-all ${
-              isSimplified
-                ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30"
-                : "bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900"
-            }`}
+            className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-semibold text-[var(--tv-accent-dark)] transition-colors hover:bg-[var(--tv-accent-soft)] dark:text-[var(--tv-accent)]"
           >
-            {isSimplifying ? (
-              <Loader2 className="w-3 h-3 animate-spin" />
-            ) : (
-              <Sparkles className="w-3 h-3 text-amber-500" />
-            )}
-            {isSimplified ? "Original Abstract" : "✨ Explain Simply"}
+            {isSimplifying ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+            {isSimplified ? "Show original" : "Explain simply"}
           </button>
 
-          {/* Translation Selector */}
-          <div className="flex items-center gap-1 text-slate-500">
-            {isTranslating ? (
-              <Loader2 className="w-3 h-3 animate-spin text-indigo-500" />
-            ) : (
-              <Languages className="w-3 h-3 text-indigo-500" />
-            )}
+          <label className="flex items-center gap-1.5 text-[11px] text-[var(--tv-muted)]">
+            {isTranslating ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Languages className="h-3.5 w-3.5" />}
             <select
               value={selectedLang}
               onChange={(e) => handleLanguageChange(e.target.value)}
-              className="bg-transparent text-[11px] font-semibold text-slate-700 dark:text-slate-300 focus:outline-none cursor-pointer"
+              disabled={isTranslating}
+              aria-label="Translate paper"
+              className="max-w-[115px] cursor-pointer bg-transparent font-semibold text-[var(--tv-text)] outline-none"
             >
               {LANGUAGES.map((lang) => (
-                <option key={lang} value={lang} className="dark:bg-slate-900">
-                  {lang === "Original" ? "🌍 Translate" : lang}
+                <option key={lang} value={lang} className="bg-[var(--tv-surface)]">
+                  {lang === "Original" ? "Translate" : lang}
                 </option>
               ))}
             </select>
-          </div>
+          </label>
         </div>
 
-        {/* Abstract Preview */}
-        <div className="mb-4 space-y-2">
+        <div className="mb-5">
           {isSimplified && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
-              <Bot className="w-3 h-3" /> 🤖 AI Simplified Abstract
+            <span className="mb-2 inline-flex items-center gap-1 rounded-full bg-[var(--tv-accent-soft)] px-2 py-1 text-[10px] font-semibold text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]">
+              <Bot className="h-3 w-3" /> AI-assisted summary
             </span>
           )}
-          <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed">
-            {displayAbstract}
-          </p>
-
-          {/* Key takeaways if simplified */}
-          {isSimplified && simplifiedData?.keyTakeaways && (
-            <ul className="pt-1 text-[11px] space-y-1 text-slate-700 dark:text-slate-300">
+          <p className="line-clamp-4 text-sm leading-6 text-[var(--tv-muted)]">{displayAbstract}</p>
+          {isSimplified && simplifiedData?.keyTakeaways?.length ? (
+            <ul className="mt-3 space-y-1.5 border-t border-[var(--tv-border)] pt-3 text-xs text-[var(--tv-text)]">
               {simplifiedData.keyTakeaways.slice(0, 2).map((takeaway, i) => (
-                <li key={i} className="flex items-start gap-1">
-                  <Check className="w-3 h-3 text-emerald-500 shrink-0 mt-0.5" />
+                <li key={i} className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]" />
                   <span>{takeaway}</span>
                 </li>
               ))}
             </ul>
-          )}
+          ) : null}
         </div>
 
-        {/* Research Gap Preview */}
-        <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/80 mb-4 text-xs">
-          <span className="font-bold text-amber-600 dark:text-amber-400 block mb-0.5 text-[11px] uppercase tracking-wider">
-            Research Gap
-          </span>
-          <p className="text-slate-600 dark:text-slate-400 line-clamp-2 italic">
-            "{thesis.researchGap}"
-          </p>
+        <div className="mb-5 rounded-xl border border-[var(--tv-border)] bg-[var(--tv-surface-soft)] p-4">
+          <div className="mb-1 flex items-center justify-between gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]">
+              Research gap
+            </span>
+            <span className="text-[10px] text-[var(--tv-muted)]">Evidence to review</span>
+          </div>
+          <p className="line-clamp-3 text-sm leading-5 text-[var(--tv-text)]">{thesis.researchGap}</p>
         </div>
 
-        {/* Metrics Row: Novelty, Difficulty, Citations */}
-        <div className="grid grid-cols-3 gap-2 py-2 border-t border-slate-100 dark:border-slate-800/60 mb-4 text-center">
-          <div className="p-2 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30">
-            <span className="text-[10px] text-slate-500 uppercase font-semibold block">Novelty</span>
-            <span className="font-extrabold text-sm text-indigo-600 dark:text-indigo-400">
-              {thesis.noveltyScore}%
-            </span>
-          </div>
-          <div className="p-2 rounded-lg bg-amber-50/50 dark:bg-amber-950/30">
-            <span className="text-[10px] text-slate-500 uppercase font-semibold block">Difficulty</span>
-            <span className="font-extrabold text-sm text-amber-600 dark:text-amber-400">
-              {thesis.difficultyScore}%
-            </span>
-          </div>
-          <div className="p-2 rounded-lg bg-slate-100/50 dark:bg-slate-800/40">
-            <span className="text-[10px] text-slate-500 uppercase font-semibold block">Citations</span>
-            <span className="font-extrabold text-sm text-slate-800 dark:text-slate-200">
-              {thesis.citationsCount}
-            </span>
-          </div>
+        <div className="grid grid-cols-3 gap-2">
+          <Metric label="Novelty" value={`${novelty}%`} tone="accent" />
+          <Metric label="Difficulty" value={`${clampScore(thesis.difficultyScore)}%`} tone="neutral" />
+          <Metric label="Citations" value={thesis.citationsCount.toLocaleString()} tone="neutral" />
         </div>
+
+        {confidence > 0 && (
+          <div className="mt-3 flex items-center justify-between text-[10px] text-[var(--tv-muted)]">
+            <span>Discovery confidence</span>
+            <span className="font-semibold text-[var(--tv-text)]">{confidence}%</span>
+          </div>
+        )}
       </div>
 
-      {/* Action Footer */}
-      <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+      <div className="flex flex-col gap-2 border-t border-[var(--tv-border)] p-4 sm:flex-row sm:items-center sm:justify-between">
         <button
+          type="button"
           onClick={() => onSelectDetails(thesis)}
-          className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
+          className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-semibold text-[var(--tv-text)] transition-colors hover:bg-[var(--tv-surface-soft)]"
         >
-          View Analysis <ExternalLink className="w-3 h-3" />
+          View analysis <ExternalLink className="h-3.5 w-3.5" />
         </button>
 
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex">
           <button
+            type="button"
             onClick={() => onCite(thesis)}
-            className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex items-center gap-1"
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[var(--tv-border)] bg-[var(--tv-surface)] px-3 py-2 text-xs font-semibold text-[var(--tv-text)] transition-colors hover:bg-[var(--tv-surface-soft)]"
           >
-            <Quote className="w-3 h-3" /> Cite
+            <Quote className="h-3.5 w-3.5" /> Cite
           </button>
           <button
+            type="button"
             onClick={() => onBuildProposal(thesis)}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-colors flex items-center gap-1"
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[var(--tv-accent)] px-3.5 py-2 text-xs font-bold text-[var(--tv-on-accent)] transition-colors hover:bg-[var(--tv-accent-dark)]"
           >
-            <FileText className="w-3.5 h-3.5" /> Proposal
+            <FileText className="h-3.5 w-3.5" /> Build research
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 
+function Metric({ label, value, tone }: { label: string; value: string; tone: "accent" | "neutral" }) {
+  return (
+    <div className="rounded-xl border border-[var(--tv-border)] bg-[var(--tv-surface)] px-2 py-2.5 text-center">
+      <span className="block text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--tv-muted)]">{label}</span>
+      <span
+        className={`mt-0.5 block text-sm font-bold ${
+          tone === "accent" ? "text-[var(--tv-accent-dark)] dark:text-[var(--tv-accent)]" : "text-[var(--tv-text)]"
+        }`}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
