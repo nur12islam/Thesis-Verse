@@ -57,5 +57,45 @@ main > div > .space-y-8 .animate-spin{color:var(--tv-accent)!important}
 .fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3) .rounded-xl{border-color:var(--tv-border)!important}
 .fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3) .bg-slate-50,.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3) .bg-slate-100{background:var(--tv-surface-soft)!important}
 .fixed.inset-0.z-50 > .relative.w-full.max-w-4xl a{color:var(--tv-accent-dark)!important}.dark .fixed.inset-0.z-50 > .relative.w-full.max-w-4xl a{color:var(--tv-accent)!important}
-@media(max-width:768px){main > div > .space-y-8{padding-left:4px;padding-right:4px}main > div > .space-y-8 > div:first-child h1{font-size:1.65rem!important}main > div > .space-y-8 > div:nth-child(2){border-radius:16px!important}main > div > .space-y-8 > div:nth-child(2) input{min-height:50px!important}.fixed.inset-0.z-50{padding:0!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl{max-height:100dvh!important;height:100dvh!important;border-radius:0!important;border-left:0!important;border-right:0!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:first-child{padding:16px!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2){padding-left:8px!important;padding-right:8px!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button{padding-left:10px!important;padding-right:10px!important;white-space:nowrap}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3){padding:20px!important}}
-@media(max-width:640px){main > .space-y-16 > section:first-child{border-radius:22px!important}}
+
+/* Rare discovery / research-gap workspace */
+main > div > .space-y-10{max-width:1400px;margin:0 auto}
+main > div > .space-y-10 > div:first-child{background:var(--tv-surface)!important;color:var(--tv-text)!important;border:1px solid var(--tv-border)!important;border-radius:24px!important;box-shadow:0 10px 34px rgba(20,28,18,.06)!important}
+.dark main > div > .space-y-10 > div:first-child{background:#151b15!important;border-color:#394238!important}
+main > div > .space-y-10 > div:first-child .bg-amber-500\/20{background:var(--tv-accent-soft)!important;border-color:var(--tv-border)!important}
+main > div > .space-y-10 > div:first-child h1{font-family:Georgia,"Times New Roman",serif!important;font-weight:600!important;letter-spacing:-.025em!important;color:var(--tv-heading)!important}
+main > div > .space-y-10 > div:first-child p{color:var(--tv-muted)!important;max-width:760px}
+main > div > .space-y-10 > div:nth-child(2){background:var(--tv-surface)!important;border-color:var(--tv-border)!important;border-radius:20px!important;box-shadow:0 8px 24px rgba(20,28,18,.04)!important;color:var(--tv-text)!important}
+main > div > .space-y-10 > div:nth-child(2) label{color:var(--tv-muted)!important}
+main > div > .space-y-10 > div:nth-child(2) button{border-color:var(--tv-border)!important}
+main > div > .space-y-10 > div:nth-child(2) button[class*="bg-amber-"]{background:var(--tv-accent)!important;color:var(--tv-on-accent)!important;border-color:var(--tv-accent)!important}
+main > div > .space-y-10 > div:nth-child(2) button[class*="bg-gradient-"]{background:var(--tv-accent)!important;color:var(--tv-on-accent)!important}
+main > div > .space-y-10 > div:nth-child(2) button:hover{transform:translateY(-1px)}
+main > div > .space-y-10 > div:nth-child(3){border-color:var(--tv-border)!important}
+main > div > .space-y-10 > div:nth-child(3) button{background:var(--tv-surface-soft)!important;color:var(--tv-text)!important;border:1px solid var(--tv-border)!important}
+main > div > .space-y-10 > div:nth-child(3) button[class*="bg-indigo-"]{background:var(--tv-accent)!important;color:var(--tv-on-accent)!important;border-color:var(--tv-accent)!important}
+main > div > .space-y-10 > div:nth-child(3) span[class*="text-emerald-"]{color:var(--tv-accent-dark)!important}
+main > div > .space-y-10 .grid > article{border-color:var(--tv-border)!important;background:var(--tv-surface)!important;border-radius:20px!important}
+main > div > .space-y-10 .grid > article:hover{border-color:var(--tv-border-strong)!important;box-shadow:0 10px 30px rgba(20,28,18,.06)!important}
+main > div > .space-y-10 .grid > article h3{font-family:Georgia,"Times New Roman",serif!important;font-weight:600!important;color:var(--tv-heading)!important}
+main > div > .space-y-10 .grid > article [class*="from-rose-"],[class*="from-amber-"]{background:var(--tv-accent-soft)!important;color:var(--tv-accent-dark)!important}
+main > div > .space-y-10 .grid > article .bg-indigo-50,.main > div > .space-y-10 .grid > article .bg-purple-50{background:var(--tv-surface-soft)!important}
+main > div > .space-y-10 .grid > article .bg-slate-50{background:var(--tv-surface-soft)!important}
+main > div > .space-y-10 .grid > article .bg-emerald-50\/50,.main > div > .space-y-10 .grid > article .bg-purple-50\/50,.main > div > .space-y-10 .grid > article .bg-indigo-50\/50{background:var(--tv-surface-soft)!important;border-color:var(--tv-border)!important}
+main > div > .space-y-10 .grid > article .bg-indigo-50\/60{background:var(--tv-accent-soft)!important;border-color:var(--tv-border)!important}
+main > div > .space-y-10 .grid > article button{border-color:var(--tv-border)!important}
+main > div > .space-y-10 .grid > article button[class*="bg-amber-"]{background:var(--tv-accent)!important;color:var(--tv-on-accent)!important}
+main > div > .space-y-10 .grid > article button[class*="bg-indigo-"]{background:var(--tv-surface-soft)!important;color:var(--tv-text)!important}
+main > div > .space-y-10 .grid > article button[class*="bg-indigo-"]:hover{background:var(--tv-accent-soft)!important}
+
+/* Research gap dashboard nested inside Rare Discovery */
+main > div > .space-y-10 > .space-y-8.rounded-3xl{background:var(--tv-surface)!important;border:1px solid var(--tv-border)!important;color:var(--tv-text)!important;box-shadow:none!important}
+.dark main > div > .space-y-10 > .space-y-8.rounded-3xl{background:#151b15!important}
+main > div > .space-y-10 > .space-y-8.rounded-3xl h2,main > div > .space-y-10 > .space-y-8.rounded-3xl h3{font-family:Georgia,"Times New Roman",serif!important;color:var(--tv-heading)!important}
+main > div > .space-y-10 > .space-y-8.rounded-3xl .bg-rose-950\/20,main > div > .space-y-10 > .space-y-8.rounded-3xl .bg-amber-950\/20,main > div > .space-y-10 > .space-y-8.rounded-3xl .bg-emerald-950\/20{background:var(--tv-surface-soft)!important;border-color:var(--tv-border)!important}
+main > div > .space-y-10 > .space-y-8.rounded-3xl .bg-slate-950,main > div > .space-y-10 > .space-y-8.rounded-3xl .bg-slate-900{background:var(--tv-surface-soft)!important;border-color:var(--tv-border)!important}
+main > div > .space-y-10 > .space-y-8.rounded-3xl .text-rose-400,main > div > .space-y-10 > .space-y-8.rounded-3xl .text-amber-400,main > div > .space-y-10 > .space-y-8.rounded-3xl .text-emerald-400{color:var(--tv-accent-dark)!important}
+main > div > .space-y-10 > .space-y-8.rounded-3xl .bg-indigo-500\/20{background:var(--tv-accent-soft)!important;border-color:var(--tv-border)!important}
+
+@media(max-width:768px){main > div > .space-y-8{padding-left:4px;padding-right:4px}main > div > .space-y-8 > div:first-child h1{font-size:1.65rem!important}main > div > .space-y-8 > div:nth-child(2){border-radius:16px!important}main > div > .space-y-8 > div:nth-child(2) input{min-height:50px!important}.fixed.inset-0.z-50{padding:0!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl{max-height:100dvh!important;height:100dvh!important;border-radius:0!important;border-left:0!important;border-right:0!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:first-child{padding:16px!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2){padding-left:8px!important;padding-right:8px!important}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(2) button{padding-left:10px!important;padding-right:10px!important;white-space:nowrap}.fixed.inset-0.z-50 > .relative.w-full.max-w-4xl > div:nth-child(3){padding:20px!important}main > div > .space-y-10{padding-left:4px;padding-right:4px}main > div > .space-y-10 > div:first-child{border-radius:18px!important}main > div > .space-y-10 > div:nth-child(2){border-radius:16px!important;padding:18px!important}main > div > .space-y-10 > div:nth-child(3){overflow-x:auto}main > div > .space-y-10 .grid > article{border-radius:16px!important} }
+@media(max-width:640px){main > .space-y-16 > section:first-child{border-radius:22px!important}main > div > .space-y-10 > div:nth-child(2) button{width:100%}}
