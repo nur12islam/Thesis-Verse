@@ -20,6 +20,18 @@ source = source.replace(
 // Replace legacy hard-coded production URL references.
 source = source.replaceAll("https://thesisverse.org", "https://thesisverse.dpdns.org");
 
+// Use OpenRouter's current free-model router instead of relying on individual free model IDs
+// that can change or become unavailable. The router selects an available free model and
+// supports the same chat-completions interface used by ThesisVerse.
+source = source.replace(
+  'let preferredModel = "meta-llama/llama-3.3-70b-instruct:free";',
+  'let preferredModel = "openrouter/free";'
+);
+source = source.replace(
+  /const openRouterModelsToTry = Array\.from\(new Set\(\[[\s\S]*?\]\)\);/,
+  'const openRouterModelsToTry = [preferredModel];'
+);
+
 // Harden the Express boundary without adding another dependency.
 source = source.replace(
   'app.use(express.json());',
