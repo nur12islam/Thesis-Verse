@@ -87,6 +87,11 @@ h1, h2, h3, h4 { color: var(--tv-heading); }
 .dark [class*="text-slate-"] { color: var(--tv-text) !important; }
 .dark [class*="text-slate-400"], .dark [class*="text-slate-500"] { color: var(--tv-muted) !important; }
 
+/* Legacy components frequently use white text on colored cards. In light mode those cards are
+   intentionally flattened to pale sage, so white text would disappear. */
+:root:not(.dark) .text-white { color: var(--tv-text) !important; }
+:root:not(.dark) [class*="text-white/"] { color: var(--tv-text) !important; }
+
 /* Landing page specifically. This keeps the existing React functionality while replacing the visual language. */
 main > .space-y-16 > section:first-child {
   background: var(--tv-surface) !important;
