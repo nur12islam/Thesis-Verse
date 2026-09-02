@@ -9,7 +9,7 @@ ThesisVerse helps students and researchers discover literature, explore research
 - 🔎 Search and discover theses, dissertations, papers, and related research
 - 🧭 Explore a research landscape instead of treating AI output as a final answer
 - 🕳️ Surface potentially underexplored research directions with supporting evidence
-- 📚 Read paper metadata, abstracts, citations, methodology, limitations, and future directions
+- 📚 Inspect paper metadata, abstracts, citations, methodology, limitations, and future directions
 - 🤖 Use AI-assisted abstract simplification, translation, search insights, and multi-agent perspectives
 - 🔖 Save papers and compare candidates while researching
 - 📝 Turn a promising paper/topic into a structured research proposal
@@ -195,6 +195,24 @@ Before production use:
 
 The repository intentionally avoids a global authenticated read/write Firestore fallback. New collections should receive narrowly scoped rules before the application starts writing to them.
 
+## 🔬 Research workflow
+
+The intended user journey is:
+
+**Search → Understand → Compare → Find gaps → Discover topics → Validate → Build**
+
+A paper can be opened from a result card into a focused analysis view with:
+
+- Overview and bibliographic metadata
+- Abstract simplification and translation
+- Research-gap and metric review
+- Related research discovery
+- Citation generation
+- Contextual AI questions about the paper
+- Save and proposal-building actions
+
+AI is positioned as an assistant around the literature, not as a replacement for source verification or researcher judgment.
+
 ## 🧪 Quality checks
 
 Run these before deployment:
@@ -245,7 +263,7 @@ For a VPS, put Nginx, Caddy, or another reverse proxy in front of the applicatio
 
 ## 📌 Current status
 
-ThesisVerse is deployable as a Node.js application and is currently connected to Firebase Authentication/Firestore and a production Render service. The research-result experience and broader interface are being refined toward an evidence-first academic discovery workflow.
+ThesisVerse is deployable as a Node.js application and is currently connected to Firebase Authentication/Firestore and a production Render service. The research-result experience, paper analysis view, and broader interface are being refined toward an evidence-first academic discovery workflow.
 
 The application should still be treated as an active development project until rate limiting, durable analytics, automated coverage, and the final security/privacy review are completed.
 
