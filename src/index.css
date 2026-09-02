@@ -58,140 +58,82 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
 button, input, textarea, select { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
 ::selection { background: var(--tv-accent); color: var(--tv-on-accent); }
-
 h1, h2, h3, h4 { color: var(--tv-heading); }
 
-/* Calm editorial UI: no neon gradients, glow, or glass-heavy surfaces. */
+/* Quiet editorial styling inspired by the reference: matte surfaces, sage accents, restrained borders. */
 [class*="bg-gradient-"] { background-image: none !important; }
 [class*="backdrop-blur"] { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 [class*="shadow-2xl"], [class*="shadow-xl"] { box-shadow: 0 8px 30px rgba(20, 28, 18, 0.08) !important; }
 .dark [class*="shadow-2xl"], .dark [class*="shadow-xl"] { box-shadow: 0 10px 32px rgba(0, 0, 0, 0.22) !important; }
 
-/* Neutralize the old blue/purple/amber palette into the sage accent. */
-[class*="bg-indigo-"], [class*="bg-violet-"], [class*="bg-emerald-"] {
-  background-color: var(--tv-accent-soft) !important;
-  background-image: none !important;
-}
+/* Convert legacy purple/blue/amber accents to sage without changing functionality. */
+[class*="bg-indigo-"], [class*="bg-violet-"], [class*="bg-emerald-"] { background-color: var(--tv-accent-soft) !important; background-image: none !important; }
 [class*="text-indigo-"], [class*="text-violet-"], [class*="text-emerald-"], [class*="text-amber-"] { color: var(--tv-accent-dark) !important; }
 .dark [class*="text-indigo-"], .dark [class*="text-violet-"], .dark [class*="text-emerald-"], .dark [class*="text-amber-"] { color: var(--tv-accent) !important; }
 [class*="border-indigo-"], [class*="border-violet-"], [class*="border-emerald-"], [class*="border-amber-"] { border-color: var(--tv-border-strong) !important; }
 [class*="ring-indigo-"], [class*="ring-violet-"] { --tw-ring-color: color-mix(in srgb, var(--tv-accent) 28%, transparent) !important; }
 
-/* Fix the old slate palette so text stays readable in both modes. */
+/* Neutralize old slate surfaces and restore readable text in both themes. */
 .bg-slate-100\/60 { background-color: var(--tv-bg) !important; }
 .dark .dark\:bg-slate-950 { background-color: var(--tv-bg) !important; }
-[class*="bg-slate-50"] { background-color: var(--tv-surface-soft) !important; }
-[class*="bg-slate-100"] { background-color: var(--tv-surface-soft) !important; }
-[class*="bg-slate-800"], [class*="bg-slate-900"], [class*="bg-slate-950"] {
-  background-color: var(--tv-surface) !important;
-  background-image: none !important;
-}
+[class*="bg-slate-50"], [class*="bg-slate-100"] { background-color: var(--tv-surface-soft) !important; }
+[class*="bg-slate-800"], [class*="bg-slate-900"], [class*="bg-slate-950"] { background-color: var(--tv-surface) !important; background-image: none !important; }
 [class*="text-slate-900"], [class*="text-slate-800"], [class*="text-slate-700"] { color: var(--tv-text) !important; }
 [class*="text-slate-600"], [class*="text-slate-500"], [class*="text-slate-400"] { color: var(--tv-muted) !important; }
 [class*="border-slate-"] { border-color: var(--tv-border) !important; }
 .dark [class*="text-slate-"] { color: var(--tv-text) !important; }
 .dark [class*="text-slate-400"], .dark [class*="text-slate-500"] { color: var(--tv-muted) !important; }
 
-/* Light-mode text that was previously hard-coded white. Keep intentional accent buttons intact. */
-.tv-landing:not(.dark) .text-white { color: var(--tv-text) !important; }
-
-/* Shared surfaces. */
-.tv-surface { background: var(--tv-surface); border-color: var(--tv-border); color: var(--tv-text); }
-.tv-accent { color: var(--tv-accent-dark); }
-.dark .tv-accent { color: var(--tv-accent); }
-.tv-border { border-color: var(--tv-border); }
-
-/* Landing page: restrained, editorial, academic rather than AI-dashboard styling. */
-.tv-landing { color: var(--tv-text); }
-.tv-hero {
+/* Landing page specifically. This keeps the existing React functionality while replacing the visual language. */
+main > .space-y-16 > section:first-child {
   background: var(--tv-surface) !important;
   color: var(--tv-text) !important;
   border: 1px solid var(--tv-border) !important;
   border-radius: 28px !important;
   box-shadow: 0 10px 35px rgba(20, 28, 18, 0.07) !important;
 }
-.dark .tv-hero {
-  background: #151b15 !important;
-  border-color: #343d33 !important;
-  box-shadow: 0 12px 36px rgba(0,0,0,.25) !important;
-}
-.tv-hero > div:first-child { display: none; }
-.tv-hero h1 { color: var(--tv-heading) !important; font-family: Georgia, "Times New Roman", serif; font-weight: 700; letter-spacing: -0.025em; }
-.tv-hero p { color: var(--tv-muted) !important; }
-.tv-kicker {
-  background: var(--tv-accent-soft) !important;
-  border-color: var(--tv-border-strong) !important;
-  color: var(--tv-accent-dark) !important;
-}
-.dark .tv-kicker { color: var(--tv-accent) !important; }
-.tv-kicker svg { color: var(--tv-accent-dark) !important; }
-.dark .tv-kicker svg { color: var(--tv-accent) !important; }
-.tv-search {
-  background: var(--tv-surface-soft) !important;
-  border: 1px solid var(--tv-border) !important;
-  box-shadow: none !important;
-}
-.tv-search input { color: var(--tv-text) !important; }
-.tv-search input::placeholder { color: var(--tv-muted) !important; }
-.tv-primary-button {
-  background: var(--tv-accent) !important;
-  color: var(--tv-on-accent) !important;
-}
-.tv-primary-button:hover { background: var(--tv-accent-dark) !important; color: #fff !important; }
-.tv-secondary-button {
-  background: var(--tv-surface-soft) !important;
-  color: var(--tv-text) !important;
-  border-color: var(--tv-border) !important;
-}
-.tv-secondary-button:hover { background: var(--tv-surface-muted) !important; }
-.tv-topic { background: var(--tv-surface-soft) !important; color: var(--tv-muted) !important; border-color: var(--tv-border) !important; }
-.tv-topic:hover { color: var(--tv-text) !important; background: var(--tv-surface-muted) !important; }
+.dark main > .space-y-16 > section:first-child { background: #151b15 !important; border-color: #343d33 !important; box-shadow: 0 12px 36px rgba(0,0,0,.25) !important; }
+main > .space-y-16 > section:first-child > div:first-child { display: none !important; }
+main > .space-y-16 > section:first-child h1 { color: var(--tv-heading) !important; font-family: Georgia, "Times New Roman", serif; font-weight: 700; letter-spacing: -0.025em; }
+main > .space-y-16 > section:first-child h1 span { color: var(--tv-accent-dark) !important; background-image: none !important; -webkit-text-fill-color: var(--tv-accent-dark) !important; }
+.dark main > .space-y-16 > section:first-child h1 span { color: var(--tv-accent) !important; -webkit-text-fill-color: var(--tv-accent) !important; }
+main > .space-y-16 > section:first-child p { color: var(--tv-muted) !important; }
+main > .space-y-16 > section:first-child .text-white { color: var(--tv-text) !important; }
+main > .space-y-16 > section:first-child .bg-indigo-500\/10 { background: var(--tv-accent-soft) !important; }
+main > .space-y-16 > section:first-child .text-indigo-300 { color: var(--tv-accent-dark) !important; }
+.dark main > .space-y-16 > section:first-child .text-indigo-300 { color: var(--tv-accent) !important; }
+main > .space-y-16 > section:first-child form > div { background: var(--tv-surface-soft) !important; border-color: var(--tv-border) !important; box-shadow: none !important; }
+main > .space-y-16 > section:first-child input { background: transparent !important; color: var(--tv-text) !important; }
+main > .space-y-16 > section:first-child input::placeholder { color: var(--tv-muted) !important; }
+main > .space-y-16 > section:first-child form button { background: var(--tv-accent) !important; color: var(--tv-on-accent) !important; border-color: transparent !important; }
+main > .space-y-16 > section:first-child form button:hover { background: var(--tv-accent-dark) !important; color: #fff !important; }
+main > .space-y-16 > section:first-child > div.relative.z-10 > div.flex.flex-wrap button { background: var(--tv-surface-soft) !important; color: var(--tv-text) !important; border-color: var(--tv-border) !important; }
+main > .space-y-16 > section:first-child > div.relative.z-10 > div.flex.flex-wrap button:hover { background: var(--tv-surface-muted) !important; }
+main > .space-y-16 > section:first-child > div.relative.z-10 > div.pt-2 button { background: var(--tv-surface-soft) !important; color: var(--tv-muted) !important; border-color: var(--tv-border) !important; }
+main > .space-y-16 > section:first-child > div.relative.z-10 > div.pt-2 button:hover { color: var(--tv-text) !important; background: var(--tv-surface-muted) !important; }
 
-.tv-feature {
+/* The feature banner should look like a calm content card, not a neon alert. */
+main > .space-y-16 > section:nth-child(2) {
   background: var(--tv-surface) !important;
   border-color: var(--tv-border) !important;
-  color: var(--tv-text) !important;
   box-shadow: none !important;
 }
-.tv-feature h2 { color: var(--tv-heading) !important; font-family: Georgia, "Times New Roman", serif; }
-.tv-feature p { color: var(--tv-muted) !important; }
-.tv-feature .tv-feature-kicker { background: var(--tv-accent-soft) !important; color: var(--tv-accent-dark) !important; border-color: var(--tv-border) !important; }
-.dark .tv-feature .tv-feature-kicker { color: var(--tv-accent) !important; }
+main > .space-y-16 > section:nth-child(2) h2 { color: var(--tv-heading) !important; font-family: Georgia, "Times New Roman", serif; }
+main > .space-y-16 > section:nth-child(2) p, main > .space-y-16 > section:nth-child(2) span { color: var(--tv-muted) !important; }
+main > .space-y-16 > section:nth-child(2) button { background: var(--tv-accent) !important; color: var(--tv-on-accent) !important; border-color: transparent !important; }
 
-.tv-card {
-  background: var(--tv-surface) !important;
-  border-color: var(--tv-border) !important;
-  color: var(--tv-text) !important;
-  box-shadow: none !important;
-}
-.tv-card:hover { border-color: var(--tv-accent) !important; box-shadow: 0 8px 24px rgba(20,28,18,.06) !important; }
-.tv-card h3 { color: var(--tv-heading) !important; }
-.tv-card .tv-icon { background: var(--tv-accent-soft) !important; color: var(--tv-accent-dark) !important; }
-.dark .tv-card .tv-icon { color: var(--tv-accent) !important; }
+/* Section headings and cards use the same serif/sage editorial hierarchy. */
+main > .space-y-16 section h2 { font-family: Georgia, "Times New Roman", serif; }
+main > .space-y-16 section .bg-white, main > .space-y-16 section [class*="dark:bg-slate-900"] { background: var(--tv-surface) !important; }
 
-.tv-metrics {
-  background: var(--tv-surface-soft) !important;
-  color: var(--tv-text) !important;
-  border-color: var(--tv-border) !important;
-  box-shadow: none !important;
-}
-.tv-metrics h2 { color: var(--tv-heading) !important; font-family: Georgia, "Times New Roman", serif; }
-.tv-metrics .metric-number { color: var(--tv-accent-dark) !important; }
-.dark .tv-metrics .metric-number { color: var(--tv-accent) !important; }
-
-/* Keep the rest of the application consistent with the same quiet design language. */
-input, textarea, select {
-  background-color: var(--tv-surface) !important;
-  color: var(--tv-text) !important;
-  border-color: var(--tv-border) !important;
-}
+/* Inputs across the application. */
+input, textarea, select { background-color: var(--tv-surface) !important; color: var(--tv-text) !important; border-color: var(--tv-border) !important; }
 input::placeholder, textarea::placeholder { color: var(--tv-muted) !important; }
 .dark input, .dark textarea, .dark select { background-color: var(--tv-surface-soft) !important; }
 
 @media (max-width: 640px) {
-  .tv-hero { border-radius: 22px !important; }
+  main > .space-y-16 > section:first-child { border-radius: 22px !important; }
 }
