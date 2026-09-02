@@ -13,7 +13,7 @@ ThesisVerse helps students and researchers discover thesis topics, explore resea
 - 📝 Thesis/proposal builder with structured sections
 - 🐇 ResearchRabbit-inspired paper exploration and graph views
 - 📊 Research analytics and comparison tools
-- 🔐 Firebase Authentication and Firestore integration
+- 🔐 Firebase Authentication and Cloud Firestore integration
 - ⚡ React + Vite + TypeScript frontend with an Express/TypeScript server
 - 📱 Responsive interface with PWA support
 
@@ -27,21 +27,21 @@ ThesisVerse helps students and researchers discover thesis topics, explore resea
 - Firebase Authentication
 - Cloud Firestore
 - Google Gemini (`@google/genai`)
-- Bun/npm-compatible dependency workflow
+- npm or Bun
 
 ## 📁 Project Structure
 
 ```text
 .
 ├── public/                  # Static/PWA assets
-├── src/
-│   ├── components/          # UI, AI tools, proposal, workspace and discovery features
-│   ├── data/                # Seed thesis/research data
-│   ├── lib/                 # Firebase and graph helpers
-│   ├── pages/               # Application pages
-│   ├── services/            # API/workspace services
-│   └── types/               # Shared TypeScript types
-├── server.ts                # Express + Vite development/server entry
+├── src/                     # React application source
+│   ├── components/
+│   ├── data/
+│   ├── lib/
+│   ├── pages/
+│   ├── services/
+│   └── types/
+├── server.ts                # Express + Vite server entry
 ├── index.html               # Frontend entry document
 ├── firebase-applet-config.json
 ├── firestore.rules
@@ -55,21 +55,19 @@ ThesisVerse helps students and researchers discover thesis topics, explore resea
 
 ### Prerequisites
 
-- Node.js 18+ (or a current LTS release)
+- Node.js 18+ (current LTS recommended)
 - npm or Bun
-- Firebase project credentials/configuration
-- Gemini API key for AI features
-- OpenRouter API key for features that use OpenRouter
+- A Firebase project for authentication/database features
+- A Gemini API key for Gemini-powered features
+- An OpenRouter API key for OpenRouter-powered features
 
 ### 1. Install dependencies
-
-Using npm:
 
 ```bash
 npm install
 ```
 
-Or Bun:
+or:
 
 ```bash
 bun install
@@ -77,15 +75,13 @@ bun install
 
 ### 2. Configure environment variables
 
-Create a local `.env` file. **Never commit real API keys.**
-
-Start from the provided example:
+Create a local `.env` file from `.env.example`:
 
 ```bash
 cp .env.example .env
 ```
 
-Add your real secrets locally, for example:
+Then configure your secrets locally:
 
 ```env
 GEMINI_API_KEY=your_real_gemini_key
@@ -93,104 +89,118 @@ OPENROUTER_API_KEY=your_real_openrouter_key
 APP_URL=http://localhost:3000
 ```
 
-The repository's `.gitignore` excludes `.env` files while keeping `.env.example` available as a safe template.
+**Never commit real API keys or other secrets.**
 
-### 3. Start the development server
+### 3. Start development
 
 ```bash
 npm run dev
 ```
 
-Or:
-
-```bash
-bun run dev
-```
-
-The app is served by the Express/Vite server on port `3000` by default.
+The development server listens on port `3000` by default.
 
 ## 📦 Production Build
 
-Build both the Vite frontend and bundled server:
-
 ```bash
 npm run build
-```
-
-Then run:
-
-```bash
 npm start
 ```
 
-## 🌐 Hosting on a `.US.KG` domain
+The build creates the Vite frontend and bundles the Express server into `dist/server.cjs`.
 
-ThesisVerse can use a custom `.US.KG` domain, but **DigitalPlat FreeDomain is the domain-registration/delegation layer, not the web host**. DigitalPlat's documentation explains that ordinary DNS records are managed at an external authoritative DNS provider, while your web host serves the application. citeturn346508search1turn346508search4
+## 🌐 Deploying with a `.US.KG` domain
 
-### Recommended deployment model
+A DigitalPlat `.US.KG` domain is the **domain name**, not the web-hosting service. DigitalPlat delegates the domain to external authoritative nameservers; ordinary `A`, `AAAA`, `CNAME`, `MX`, and `TXT` records are managed by that external DNS provider.
 
-Because ThesisVerse uses an Express server as well as Vite, deploy it to a host that can run a Node.js server. GitHub Pages is suitable for static frontend deployments, but it does not run the Express server contained in this repository.
+### Recommended architecture for ThesisVerse
 
-A typical setup is:
+ThesisVerse contains an Express server and server-side AI integrations, so use a host capable of running a Node.js application rather than a static-only host.
 
 ```text
-DigitalPlat .US.KG domain
-        ↓
+Your .US.KG domain
+        │
+        ▼
+DigitalPlat registration
+        │
+        ▼
 External authoritative DNS
-        ↓
-Node.js hosting provider
-        ↓
+        │
+        ├── A / CNAME ──────► Your Node.js host
+        │
+        ▼
+https://your-domain.us.kg
+        │
+        ▼
 ThesisVerse (Vite + Express)
 ```
 
-DigitalPlat's official repository provides the current dashboard/tutorial flow for registering a `.US.KG` domain and delegating it to external nameservers. citeturn16file0
+### DigitalPlat setup
 
-### Domain setup
+1. Register your desired `.US.KG` name using the DigitalPlat FreeDomain dashboard.
+2. Follow DigitalPlat's current instructions to connect external nameservers.
+3. At the external DNS provider, add the DNS record(s) required by your hosting provider.
+4. Add the same custom domain in your hosting provider.
+5. Enable HTTPS/TLS at the hosting provider.
+6. Set `APP_URL` to your final HTTPS domain.
 
-1. Register your `.US.KG` domain through the DigitalPlat FreeDomain dashboard.
-2. Configure the assigned external nameservers in DigitalPlat.
-3. In your external DNS provider, create the records required by your hosting provider.
-4. Configure the same custom domain in the hosting provider and enable HTTPS.
+Official DigitalPlat resources:
 
-DigitalPlat explicitly notes that its dashboard does **not** provide the ordinary A/CNAME record editor; those records are created at the external DNS service. citeturn346508search4turn349326search2
+- DigitalPlat FreeDomain: https://github.com/DigitalPlatDev/FreeDomain
+- FreeDomain dashboard: https://dash.domain.digitalplat.org/
+- FreeDomain tutorial: https://github.com/DigitalPlatDev/FreeDomain/tree/main/documents/tutorial
 
-## ☁️ GitHub Pages Note
+### Important: GitHub Pages
 
-GitHub Pages can host a static website and supports custom domains, including apex-domain DNS configuration. citeturn346508search6turn346508search5
+GitHub Pages can serve the Vite frontend as a static site, but **it cannot run the Express server in this repository**. ThesisVerse currently needs its Node.js server for API routes and server-side AI calls.
 
-However, this repository currently contains a server-side Express application (`server.ts`) and AI integrations that depend on server environment variables, so **do not treat GitHub Pages as a full replacement for the Node.js server**. The frontend can be built separately as static assets if you intentionally redesign the deployment architecture.
+If you want a GitHub Pages-only deployment later, the application must first be converted to a static/frontend-only architecture and every server endpoint must be replaced with a compatible backend or serverless function.
 
-## 🔐 Security
+## 🐳 Docker / VPS Deployment
 
-- Never commit `.env` or real API keys.
-- Rotate any API credential that has previously been exposed.
-- Review Firebase Authentication and Firestore rules before production deployment.
-- Keep server-side API keys on the hosting provider, not in frontend source code.
-- Review OAuth callback/production authentication flows before enabling public sign-in.
+The repository includes a Docker deployment path for hosts that support containers. Build and run it with:
+
+```bash
+docker build -t thesisverse .
+docker run --env-file .env -p 3000:3000 thesisverse
+```
+
+For a VPS, put Nginx, Caddy, or another reverse proxy in front of the container and point your `.US.KG` DNS record to the VPS. The proxy should terminate HTTPS and forward requests to the ThesisVerse server on port `3000`.
+
+## 🔐 Production Security Checklist
+
+Before opening the site to the public:
+
+- [ ] Keep `.env` and all real API keys out of Git.
+- [ ] Rotate any credential that has ever been accidentally exposed.
+- [ ] Replace development/demo OAuth behavior with real production authentication.
+- [ ] Tighten Firestore rules so authenticated users cannot access unrelated documents.
+- [ ] Keep Gemini/OpenRouter keys server-side.
+- [ ] Configure the final `APP_URL` and production OAuth redirect URLs.
+- [ ] Enable HTTPS and verify the custom domain.
+- [ ] Add rate limiting and abuse protection to public AI endpoints.
+- [ ] Replace in-memory analytics/state with durable storage where persistence is required.
+- [ ] Test `npm run lint` and `npm run build` before deployment.
 
 ## 🧪 Useful Scripts
 
 | Command | Purpose |
 |---|---|
 | `npm run dev` | Start development server |
-| `npm run build` | Build frontend and server |
+| `npm run build` | Build frontend and production server |
 | `npm start` | Start the production server |
 | `npm run preview` | Preview the Vite build |
-| `npm run lint` | Run TypeScript type-checking |
+| `npm run lint` | Type-check the project |
 | `npm run clean` | Remove generated build output |
 
 ## 📌 Current Status
 
-ThesisVerse is an actively developed prototype/application foundation. Some integrations and production hardening may still be required before public launch, especially authentication, Firestore security rules, external API configuration, and deployment infrastructure.
+ThesisVerse is an actively developed application foundation. The core project is deployable as a Node.js application, but production hardening is still required before a public launch, especially authentication, Firestore rules, rate limiting, durable analytics, and deployment secrets.
 
 ## 📄 License
 
 See the repository for licensing information.
 
-## 🔗 Repository
+## 🔗 Links
 
-https://github.com/nur12islam/Thesis-Verse
-
-## 🌐 DigitalPlat FreeDomain
-
-https://github.com/DigitalPlatDev/FreeDomain
+- Repository: https://github.com/nur12islam/Thesis-Verse
+- DigitalPlat FreeDomain: https://github.com/DigitalPlatDev/FreeDomain
