@@ -1,6 +1,7 @@
 node_modules/
 build/
 dist/
+.generated-server.ts
 coverage/
 .DS_Store
 *.log
