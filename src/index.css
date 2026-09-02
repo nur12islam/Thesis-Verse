@@ -38,9 +38,7 @@
   --tv-accent-soft: #163b24;
 }
 
-html {
-  background: var(--tv-bg);
-}
+html { background: var(--tv-bg); }
 
 body {
   margin: 0;
@@ -52,33 +50,26 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
+button, input, textarea, select { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
 
-button {
-  -webkit-tap-highlight-color: transparent;
-}
+::selection { background: #86efac; color: #052e16; }
+.dark ::selection { background: #166534; color: #f0fdf4; }
 
-::selection {
-  background: #86efac;
-  color: #052e16;
-}
+.tv-surface { background: var(--tv-surface); border-color: var(--tv-border); }
+.tv-accent { color: var(--tv-accent); }
 
-.dark ::selection {
-  background: #166534;
-  color: #f0fdf4;
-}
+/* Legacy Indigo/Violet utilities are intentionally mapped to ThesisVerse green.
+   This keeps existing page components visually consistent without requiring a risky
+   rewrite of every component at once. */
+[class*="bg-indigo-"], [class*="bg-violet-"] { background-color: var(--tv-accent) !important; }
+[class*="text-indigo-"], [class*="text-violet-"] { color: var(--tv-accent) !important; }
+[class*="border-indigo-"], [class*="border-violet-"] { border-color: var(--tv-accent) !important; }
+[class*="ring-indigo-"], [class*="ring-violet-"] { --tw-ring-color: color-mix(in srgb, var(--tv-accent) 35%, transparent) !important; }
 
-/* Keep the interface calm and tactile rather than overly "AI generated". */
-.tv-surface {
-  background: var(--tv-surface);
-  border-color: var(--tv-border);
-}
+.dark [class*="bg-indigo-950"], .dark [class*="bg-violet-950"] { background-color: var(--tv-accent-soft) !important; }
+.dark [class*="text-indigo-400"], .dark [class*="text-violet-400"] { color: #8ee6a6 !important; }
 
-.tv-accent {
-  color: var(--tv-accent);
-}
+/* Replace the old cool gray page surfaces with warm, paper-like neutrals in light mode. */
+.bg-slate-100\/60 { background-color: #f6faf6 !important; }
+.dark .dark\:bg-slate-950 { background-color: var(--tv-bg) !important; }
