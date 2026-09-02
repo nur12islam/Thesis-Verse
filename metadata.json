@@ -1,0 +1,6 @@
+{
+  "name": "ThesisVerse",
+  "description": "AI-Powered Thesis & Academic Research Discovery Platform with Rare Thesis Discovery, Proposal Generator, Paper Comparison, and Smart Research Tools",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

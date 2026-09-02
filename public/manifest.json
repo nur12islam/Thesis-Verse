@@ -1,0 +1,28 @@
+{
+  "name": "ThesisVerse - AI Academic Research & Discovery Platform",
+  "short_name": "ThesisVerse",
+  "description": "AI-Powered Thesis & Academic Research Discovery Platform with Rare Thesis Discovery, Proposal Generator, Paper Comparison, and Smart Research Tools",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234f46e5'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>🎓</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Rare Thesis Engine",
+      "url": "/?tab=rare",
+      "description": "Discover ground-breaking rare thesis ideas"
+    },
+    {
+      "name": "Proposal Builder",
+      "url": "/?tab=proposal",
+      "description": "Build complete academic research proposals"
+    }
+  ]
+}
