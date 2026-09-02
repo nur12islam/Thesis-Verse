@@ -39,7 +39,6 @@
 }
 
 html { background: var(--tv-bg); }
-
 body {
   margin: 0;
   min-width: 320px;
@@ -49,27 +48,39 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
 button, input, textarea, select { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
-
 ::selection { background: #86efac; color: #052e16; }
 .dark ::selection { background: #166534; color: #f0fdf4; }
-
 .tv-surface { background: var(--tv-surface); border-color: var(--tv-border); }
 .tv-accent { color: var(--tv-accent); }
 
-/* Legacy Indigo/Violet utilities are intentionally mapped to ThesisVerse green.
-   This keeps existing page components visually consistent without requiring a risky
-   rewrite of every component at once. */
-[class*="bg-indigo-"], [class*="bg-violet-"] { background-color: var(--tv-accent) !important; }
+/* ThesisVerse palette: replace the old purple/blue AI aesthetic with a restrained academic green. */
+[class*="bg-indigo-"], [class*="bg-violet-"] { background-color: var(--tv-accent) !important; background-image: none !important; }
 [class*="text-indigo-"], [class*="text-violet-"] { color: var(--tv-accent) !important; }
 [class*="border-indigo-"], [class*="border-violet-"] { border-color: var(--tv-accent) !important; }
-[class*="ring-indigo-"], [class*="ring-violet-"] { --tw-ring-color: color-mix(in srgb, var(--tv-accent) 35%, transparent) !important; }
-
+[class*="ring-indigo-"], [class*="ring-violet-"] { --tw-ring-color: color-mix(in srgb, var(--tv-accent) 30%, transparent) !important; }
 .dark [class*="bg-indigo-950"], .dark [class*="bg-violet-950"] { background-color: var(--tv-accent-soft) !important; }
 .dark [class*="text-indigo-400"], .dark [class*="text-violet-400"] { color: #8ee6a6 !important; }
 
-/* Replace the old cool gray page surfaces with warm, paper-like neutrals in light mode. */
+/* Remove excessive glassmorphism and neon gradients. Cards should feel like a real academic product. */
+[class*="backdrop-blur"] { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+[class*="bg-gradient-"] { background-image: none !important; }
+
+/* Landing hero: one confident green field instead of a multi-colour AI gradient. */
+.space-y-16 > section.relative.overflow-hidden.rounded-3xl {
+  background: #14532d !important;
+  border-color: #166534 !important;
+}
+.dark .space-y-16 > section.relative.overflow-hidden.rounded-3xl {
+  background: #0d321a !important;
+  border-color: #254f32 !important;
+}
+
+/* Landing secondary highlight and metrics remain green/neutral rather than amber/purple. */
+.space-y-16 section.rounded-3xl.bg-gradient-to-r { background: var(--tv-surface-strong) !important; }
+.dark .space-y-16 section.rounded-3xl.bg-gradient-to-r { background: #0d1d12 !important; }
+
+/* Warm light-mode page background. */
 .bg-slate-100\/60 { background-color: #f6faf6 !important; }
 .dark .dark\:bg-slate-950 { background-color: var(--tv-bg) !important; }
