@@ -1,41 +1,51 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #f0fdf4;
-  --color-brand-100: #dcfce7;
-  --color-brand-200: #bbf7d0;
-  --color-brand-300: #86efac;
-  --color-brand-400: #4ade80;
-  --color-brand-500: #22c55e;
-  --color-brand-600: #16a34a;
-  --color-brand-700: #15803d;
-  --color-brand-800: #166534;
-  --color-brand-900: #14532d;
-  --color-brand-950: #052e16;
+  --color-brand-50: #f3f5ef;
+  --color-brand-100: #e6eadf;
+  --color-brand-200: #d2dac8;
+  --color-brand-300: #bcc8b0;
+  --color-brand-400: #a5b59a;
+  --color-brand-500: #91a482;
+  --color-brand-600: #7e9270;
+  --color-brand-700: #66785b;
+  --color-brand-800: #4d5c45;
+  --color-brand-900: #35402f;
+  --color-brand-950: #1a2118;
 }
 
 :root {
   color-scheme: light;
-  --tv-bg: #ffffff;
-  --tv-surface: #f7faf7;
-  --tv-surface-strong: #eef6ef;
-  --tv-border: #d9e5da;
-  --tv-text: #17351f;
-  --tv-muted: #617064;
-  --tv-accent: #176b35;
-  --tv-accent-soft: #e5f3e8;
+  --tv-bg: #f7f8f5;
+  --tv-surface: #ffffff;
+  --tv-surface-soft: #f1f3ee;
+  --tv-surface-muted: #e9ede6;
+  --tv-border: #dce1d8;
+  --tv-border-strong: #c9d0c3;
+  --tv-text: #1d251b;
+  --tv-heading: #151b14;
+  --tv-muted: #687264;
+  --tv-accent: #849779;
+  --tv-accent-dark: #65775a;
+  --tv-accent-soft: #e7ece2;
+  --tv-on-accent: #172016;
 }
 
 .dark {
   color-scheme: dark;
-  --tv-bg: #07130b;
-  --tv-surface: #0d1d12;
-  --tv-surface-strong: #112619;
-  --tv-border: #254331;
-  --tv-text: #edf7ef;
-  --tv-muted: #9db3a3;
-  --tv-accent: #63c982;
-  --tv-accent-soft: #163b24;
+  --tv-bg: #0e120e;
+  --tv-surface: #151b15;
+  --tv-surface-soft: #1a2119;
+  --tv-surface-muted: #222a21;
+  --tv-border: #303930;
+  --tv-border-strong: #414a40;
+  --tv-text: #e9ede5;
+  --tv-heading: #f4f5f0;
+  --tv-muted: #a5ae9f;
+  --tv-accent: #9baa8d;
+  --tv-accent-dark: #7f9172;
+  --tv-accent-soft: #293126;
+  --tv-on-accent: #10150f;
 }
 
 html { background: var(--tv-bg); }
@@ -48,39 +58,140 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
+
 button, input, textarea, select { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
-::selection { background: #86efac; color: #052e16; }
-.dark ::selection { background: #166534; color: #f0fdf4; }
-.tv-surface { background: var(--tv-surface); border-color: var(--tv-border); }
-.tv-accent { color: var(--tv-accent); }
+::selection { background: var(--tv-accent); color: var(--tv-on-accent); }
 
-/* ThesisVerse palette: replace the old purple/blue AI aesthetic with a restrained academic green. */
-[class*="bg-indigo-"], [class*="bg-violet-"] { background-color: var(--tv-accent) !important; background-image: none !important; }
-[class*="text-indigo-"], [class*="text-violet-"] { color: var(--tv-accent) !important; }
-[class*="border-indigo-"], [class*="border-violet-"] { border-color: var(--tv-accent) !important; }
-[class*="ring-indigo-"], [class*="ring-violet-"] { --tw-ring-color: color-mix(in srgb, var(--tv-accent) 30%, transparent) !important; }
-.dark [class*="bg-indigo-950"], .dark [class*="bg-violet-950"] { background-color: var(--tv-accent-soft) !important; }
-.dark [class*="text-indigo-400"], .dark [class*="text-violet-400"] { color: #8ee6a6 !important; }
+h1, h2, h3, h4 { color: var(--tv-heading); }
 
-/* Remove excessive glassmorphism and neon gradients. Cards should feel like a real academic product. */
-[class*="backdrop-blur"] { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+/* Calm editorial UI: no neon gradients, glow, or glass-heavy surfaces. */
 [class*="bg-gradient-"] { background-image: none !important; }
+[class*="backdrop-blur"] { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+[class*="shadow-2xl"], [class*="shadow-xl"] { box-shadow: 0 8px 30px rgba(20, 28, 18, 0.08) !important; }
+.dark [class*="shadow-2xl"], .dark [class*="shadow-xl"] { box-shadow: 0 10px 32px rgba(0, 0, 0, 0.22) !important; }
 
-/* Landing hero: one confident green field instead of a multi-colour AI gradient. */
-.space-y-16 > section.relative.overflow-hidden.rounded-3xl {
-  background: #14532d !important;
-  border-color: #166534 !important;
+/* Neutralize the old blue/purple/amber palette into the sage accent. */
+[class*="bg-indigo-"], [class*="bg-violet-"], [class*="bg-emerald-"] {
+  background-color: var(--tv-accent-soft) !important;
+  background-image: none !important;
 }
-.dark .space-y-16 > section.relative.overflow-hidden.rounded-3xl {
-  background: #0d321a !important;
-  border-color: #254f32 !important;
-}
+[class*="text-indigo-"], [class*="text-violet-"], [class*="text-emerald-"], [class*="text-amber-"] { color: var(--tv-accent-dark) !important; }
+.dark [class*="text-indigo-"], .dark [class*="text-violet-"], .dark [class*="text-emerald-"], .dark [class*="text-amber-"] { color: var(--tv-accent) !important; }
+[class*="border-indigo-"], [class*="border-violet-"], [class*="border-emerald-"], [class*="border-amber-"] { border-color: var(--tv-border-strong) !important; }
+[class*="ring-indigo-"], [class*="ring-violet-"] { --tw-ring-color: color-mix(in srgb, var(--tv-accent) 28%, transparent) !important; }
 
-/* Landing secondary highlight and metrics remain green/neutral rather than amber/purple. */
-.space-y-16 section.rounded-3xl.bg-gradient-to-r { background: var(--tv-surface-strong) !important; }
-.dark .space-y-16 section.rounded-3xl.bg-gradient-to-r { background: #0d1d12 !important; }
-
-/* Warm light-mode page background. */
-.bg-slate-100\/60 { background-color: #f6faf6 !important; }
+/* Fix the old slate palette so text stays readable in both modes. */
+.bg-slate-100\/60 { background-color: var(--tv-bg) !important; }
 .dark .dark\:bg-slate-950 { background-color: var(--tv-bg) !important; }
+[class*="bg-slate-50"] { background-color: var(--tv-surface-soft) !important; }
+[class*="bg-slate-100"] { background-color: var(--tv-surface-soft) !important; }
+[class*="bg-slate-800"], [class*="bg-slate-900"], [class*="bg-slate-950"] {
+  background-color: var(--tv-surface) !important;
+  background-image: none !important;
+}
+[class*="text-slate-900"], [class*="text-slate-800"], [class*="text-slate-700"] { color: var(--tv-text) !important; }
+[class*="text-slate-600"], [class*="text-slate-500"], [class*="text-slate-400"] { color: var(--tv-muted) !important; }
+[class*="border-slate-"] { border-color: var(--tv-border) !important; }
+.dark [class*="text-slate-"] { color: var(--tv-text) !important; }
+.dark [class*="text-slate-400"], .dark [class*="text-slate-500"] { color: var(--tv-muted) !important; }
+
+/* Light-mode text that was previously hard-coded white. Keep intentional accent buttons intact. */
+.tv-landing:not(.dark) .text-white { color: var(--tv-text) !important; }
+
+/* Shared surfaces. */
+.tv-surface { background: var(--tv-surface); border-color: var(--tv-border); color: var(--tv-text); }
+.tv-accent { color: var(--tv-accent-dark); }
+.dark .tv-accent { color: var(--tv-accent); }
+.tv-border { border-color: var(--tv-border); }
+
+/* Landing page: restrained, editorial, academic rather than AI-dashboard styling. */
+.tv-landing { color: var(--tv-text); }
+.tv-hero {
+  background: var(--tv-surface) !important;
+  color: var(--tv-text) !important;
+  border: 1px solid var(--tv-border) !important;
+  border-radius: 28px !important;
+  box-shadow: 0 10px 35px rgba(20, 28, 18, 0.07) !important;
+}
+.dark .tv-hero {
+  background: #151b15 !important;
+  border-color: #343d33 !important;
+  box-shadow: 0 12px 36px rgba(0,0,0,.25) !important;
+}
+.tv-hero > div:first-child { display: none; }
+.tv-hero h1 { color: var(--tv-heading) !important; font-family: Georgia, "Times New Roman", serif; font-weight: 700; letter-spacing: -0.025em; }
+.tv-hero p { color: var(--tv-muted) !important; }
+.tv-kicker {
+  background: var(--tv-accent-soft) !important;
+  border-color: var(--tv-border-strong) !important;
+  color: var(--tv-accent-dark) !important;
+}
+.dark .tv-kicker { color: var(--tv-accent) !important; }
+.tv-kicker svg { color: var(--tv-accent-dark) !important; }
+.dark .tv-kicker svg { color: var(--tv-accent) !important; }
+.tv-search {
+  background: var(--tv-surface-soft) !important;
+  border: 1px solid var(--tv-border) !important;
+  box-shadow: none !important;
+}
+.tv-search input { color: var(--tv-text) !important; }
+.tv-search input::placeholder { color: var(--tv-muted) !important; }
+.tv-primary-button {
+  background: var(--tv-accent) !important;
+  color: var(--tv-on-accent) !important;
+}
+.tv-primary-button:hover { background: var(--tv-accent-dark) !important; color: #fff !important; }
+.tv-secondary-button {
+  background: var(--tv-surface-soft) !important;
+  color: var(--tv-text) !important;
+  border-color: var(--tv-border) !important;
+}
+.tv-secondary-button:hover { background: var(--tv-surface-muted) !important; }
+.tv-topic { background: var(--tv-surface-soft) !important; color: var(--tv-muted) !important; border-color: var(--tv-border) !important; }
+.tv-topic:hover { color: var(--tv-text) !important; background: var(--tv-surface-muted) !important; }
+
+.tv-feature {
+  background: var(--tv-surface) !important;
+  border-color: var(--tv-border) !important;
+  color: var(--tv-text) !important;
+  box-shadow: none !important;
+}
+.tv-feature h2 { color: var(--tv-heading) !important; font-family: Georgia, "Times New Roman", serif; }
+.tv-feature p { color: var(--tv-muted) !important; }
+.tv-feature .tv-feature-kicker { background: var(--tv-accent-soft) !important; color: var(--tv-accent-dark) !important; border-color: var(--tv-border) !important; }
+.dark .tv-feature .tv-feature-kicker { color: var(--tv-accent) !important; }
+
+.tv-card {
+  background: var(--tv-surface) !important;
+  border-color: var(--tv-border) !important;
+  color: var(--tv-text) !important;
+  box-shadow: none !important;
+}
+.tv-card:hover { border-color: var(--tv-accent) !important; box-shadow: 0 8px 24px rgba(20,28,18,.06) !important; }
+.tv-card h3 { color: var(--tv-heading) !important; }
+.tv-card .tv-icon { background: var(--tv-accent-soft) !important; color: var(--tv-accent-dark) !important; }
+.dark .tv-card .tv-icon { color: var(--tv-accent) !important; }
+
+.tv-metrics {
+  background: var(--tv-surface-soft) !important;
+  color: var(--tv-text) !important;
+  border-color: var(--tv-border) !important;
+  box-shadow: none !important;
+}
+.tv-metrics h2 { color: var(--tv-heading) !important; font-family: Georgia, "Times New Roman", serif; }
+.tv-metrics .metric-number { color: var(--tv-accent-dark) !important; }
+.dark .tv-metrics .metric-number { color: var(--tv-accent) !important; }
+
+/* Keep the rest of the application consistent with the same quiet design language. */
+input, textarea, select {
+  background-color: var(--tv-surface) !important;
+  color: var(--tv-text) !important;
+  border-color: var(--tv-border) !important;
+}
+input::placeholder, textarea::placeholder { color: var(--tv-muted) !important; }
+.dark input, .dark textarea, .dark select { background-color: var(--tv-surface-soft) !important; }
+
+@media (max-width: 640px) {
+  .tv-hero { border-radius: 22px !important; }
+}
