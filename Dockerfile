@@ -2,15 +2,15 @@ FROM node:20-bookworm-slim
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+COPY package.json ./
+RUN npm install --omit=dev
 
 COPY . .
 
 ENV NODE_ENV=production
 ENV PORT=3000
 
-RUN npm run build
+RUN npm install --include=dev && npm run build
 
 EXPOSE 3000
 
