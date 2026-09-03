@@ -23,6 +23,18 @@ source = source.replace(
   '// Production authentication is handled by Firebase Auth on the client.\n\n// Health Check'
 );
 
+// Register the deep-research fallback without changing the existing search API.
+if (!source.includes('registerDeepResearchRoutes')) {
+  source = source.replace(
+    'import { INITIAL_THESES, POPULAR_TOPICS, CATEGORIES_LIST, RARE_DISCOVERY_IDEAS } from "./src/data/thesesData.js";',
+    'import { INITIAL_THESES, POPULAR_TOPICS, CATEGORIES_LIST, RARE_DISCOVERY_IDEAS } from "./src/data/thesesData.js";\nimport { registerDeepResearchRoutes } from "./server/deepResearch.js";'
+  );
+  source = source.replace(
+    'app.use(express.json({ limit: "1mb" }));',
+    'app.use(express.json({ limit: "1mb" }));\n\nregisterDeepResearchRoutes(app);'
+  );
+}
+
 // Replace legacy hard-coded production URL references.
 source = source.replaceAll("https://thesisverse.org", "https://thesisverse.dpdns.org");
 
