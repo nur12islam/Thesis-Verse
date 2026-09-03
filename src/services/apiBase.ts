@@ -1,4 +1,8 @@
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+type ViteImportMeta = ImportMeta & {
+  env?: Record<string, string | undefined>;
+};
+
+const API_BASE_URL = (((import.meta as ViteImportMeta).env?.VITE_API_BASE_URL) || "").replace(/\/$/, "");
 
 if (API_BASE_URL && typeof window !== "undefined") {
   const originalFetch = window.fetch.bind(window);
