@@ -24,7 +24,6 @@ import { ApiDocsPage } from "./pages/ApiDocsPage";
 import { LegalPage } from "./pages/LegalPage";
 import { SrsDocsPage } from "./pages/SrsDocsPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { DeepSearchButton } from "./components/DeepSearchButton";
 
 const HISTORY_KEY = "thesisVerseTab";
 
@@ -64,7 +63,7 @@ export default function App() {
     <Navbar activeTab={activeTab} setActiveTab={navigate} savedCount={savedTheses.length} compareCount={comparedTheses.length} searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearchSubmit={() => { handleSearchTopic(searchQuery); navigate("research-explorer"); }} isDarkMode={isDarkMode} onToggleTheme={toggleTheme} currentUser={currentUser} />
     <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
       {activeTab === "landing" && <LandingPage rareTheses={rareThesesList} onSearchTopic={handleSearchTopic} onSearchCategory={handleSearchTopic} setActiveTab={navigate} savedIds={savedIds} comparedIds={comparedIds} onToggleSave={handleToggleSave} onToggleCompare={handleToggleCompare} onSelectDetails={setSelectedDetailsThesis} onBuildProposal={handleBuildProposal} onCite={handleCiteQuick} />}
-      {(activeTab === "research-explorer" || activeTab === "search") && <><div className="max-w-5xl mx-auto -mb-2 flex justify-end"><DeepSearchButton initialQuery={searchQuery} /></div><AdvancedResearchExplorerPage initialQuery={searchQuery} onShowToast={addToast} /></>}
+      {(activeTab === "research-explorer" || activeTab === "search") && <AdvancedResearchExplorerPage initialQuery={searchQuery} onShowToast={addToast} />}
       {activeTab === "rare" && <RareDiscoveryPage savedIds={savedIds} onToggleSave={handleToggleSave} onBuildProposal={handleBuildProposal} onShowToast={addToast} />}
       {activeTab === "proposal" && <ProposalBuilderPage initialThesis={proposalInitialThesis} onShowToast={addToast} />}
       {activeTab === "compare" && <ComparePage comparedTheses={comparedTheses} onRemoveCompare={handleToggleCompare} onClearCompare={() => setComparedTheses([])} onSelectDetails={setSelectedDetailsThesis} onShowToast={addToast} />}
