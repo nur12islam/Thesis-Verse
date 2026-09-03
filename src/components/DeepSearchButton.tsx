@@ -1,0 +1,81 @@
+import React, { useState } from "react";
+import { AlertTriangle, Brain, CheckCircle2, ExternalLink, Globe2, Loader2, Search, ShieldCheck, Sparkles, Youtube, X } from "lucide-react";
+
+type Finding = { claim: string; evidence?: string[]; confidence?: number; sources?: string[]; caveat?: string };
+type DeepResult = {
+  topic: string;
+  sourceCount: number;
+  sources: { title: string; url: string; snippet: string; sourceType: string; displayLink?: string }[];
+  relatedSources: { title: string; url: string; snippet: string; sourceType: string; displayLink?: string }[];
+  analysts: { role: string; model: string; findingCount: number }[];
+  verifiedFindings: Finding[];
+  rejectedClaims: string[];
+  disclaimer: string;
+};
+
+const sourceIcon = (type: string) => type === "youtube" ? Youtube : type === "university" ? ShieldCheck : type === "news" ? Globe2 : Search;
+
+export const DeepSearchButton: React.FC<{ initialQuery?: string; className?: string }> = ({ initialQuery = "", className = "" }) => {
+  const [open, setOpen] = useState(false);
+  const [topic, setTopic] = useState(initialQuery);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<DeepResult | null>(null);
+  const [error, setError] = useState("");
+
+  const run = async () => {
+    const q = topic.trim();
+    if (!q) return;
+    setLoading(true); setError(""); setResult(null); setOpen(true);
+    try {
+      const response = await fetch("/api/deep-research", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ topic: q }) });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data?.error || "Deep Search could not be completed.");
+      setResult(data);
+    } catch (e: any) {
+      setError(e?.message || "Deep Search failed. Please try again.");
+    } finally { setLoading(false); }
+  };
+
+  return <>
+    <button onClick={() => { setTopic(initialQuery || topic); setOpen(true); }} className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-black shadow-lg shadow-indigo-500/20 hover:scale-[1.02] transition-transform ${className}`} title="Search beyond academic indexes using multiple source types and AI verification">
+      <Sparkles className="w-4 h-4" /> Deep Search
+    </button>
+
+    {open && <div className="fixed inset-0 z-[80] bg-slate-950/70 backdrop-blur-sm p-3 sm:p-6 flex items-center justify-center" onMouseDown={e => { if (e.target === e.currentTarget) setOpen(false); }}>
+      <section className="w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-2xl">
+        <header className="sticky top-0 z-10 flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur">
+          <div><div className="flex items-center gap-2 font-black text-slate-900 dark:text-white"><Brain className="w-5 h-5 text-violet-500" /> Deep Research</div><p className="text-xs text-slate-500 mt-1">Academic sources + universities + reports + news + YouTube + multi-AI verification</p></div>
+          <button onClick={() => setOpen(false)} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><X className="w-5 h-5" /></button>
+        </header>
+
+        <div className="p-5 space-y-5">
+          <form onSubmit={e => { e.preventDefault(); run(); }} className="flex gap-2">
+            <div className="relative flex-1"><Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input value={topic} onChange={e => setTopic(e.target.value)} placeholder="Enter a topic, e.g. Baul song" className="w-full h-11 pl-10 pr-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 outline-none text-sm" /></div>
+            <button disabled={loading || !topic.trim()} className="px-4 rounded-xl bg-violet-600 text-white font-bold text-sm disabled:opacity-50 flex items-center gap-2">{loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} Run</button>
+          </form>
+
+          {loading && <div className="rounded-2xl border border-violet-200 dark:border-violet-900/60 bg-violet-50/70 dark:bg-violet-950/20 p-5">
+            <div className="text-xs font-black uppercase tracking-wider text-violet-600 dark:text-violet-300 mb-4">Deep Search is working</div>
+            {["Expanding the topic into targeted searches", "Checking academic and university sources", "Searching reports, news and YouTube", "Assigning different jobs to multiple AI models", "Cross-checking claims against the source packet", "Preparing verified findings and source cards"].map((s, i) => <div key={s} className="flex items-center gap-3 py-2 text-sm"><span className={`w-2.5 h-2.5 rounded-full ${i < 2 ? "bg-violet-600 animate-pulse" : "border-2 border-violet-300"}`} /><span className="text-slate-700 dark:text-slate-200">{s}</span></div>)}
+          </div>}
+
+          {error && <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 text-sm text-red-700 dark:text-red-300">{error}</div>}
+
+          {result && <div className="space-y-5">
+            <div className="flex flex-wrap gap-2 items-center"><span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-violet-500/10 text-violet-700 dark:text-violet-300">Deep Search complete</span><span className="text-xs text-slate-500">{result.sourceCount} web sources reviewed</span></div>
+
+            <div className="rounded-2xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/20 p-4"><div className="flex gap-3"><AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" /><div><div className="font-black text-amber-900 dark:text-amber-200 text-sm"># AI-ASSISTED / AI-GENERATED</div><p className="text-xs leading-5 text-amber-800 dark:text-amber-300 mt-1">{result.disclaimer} AI-generated synthesis is not itself evidence.</p></div></div></div>
+
+            {result.verifiedFindings?.length > 0 && <section><div className="flex items-center gap-2 mb-3"><CheckCircle2 className="w-5 h-5 text-emerald-500" /><h3 className="font-black text-slate-900 dark:text-white">Verified findings</h3></div><div className="grid gap-3">{result.verifiedFindings.map((f, i) => <article key={i} className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4"><div className="font-bold text-sm text-slate-900 dark:text-white">{f.claim}</div>{f.evidence?.length ? <div className="mt-2 text-xs text-slate-500">Evidence: {f.evidence.join(", ")}</div> : null}<div className="mt-3 flex flex-wrap gap-2"><span className="px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-[10px] font-black">Confidence {Math.round(f.confidence || 0)}%</span>{f.caveat && <span className="text-[10px] text-slate-500">{f.caveat}</span>}</div></article>)}</div></section>}
+
+            {result.sources?.length > 0 && <section><h3 className="font-black text-slate-900 dark:text-white mb-3">Sources supporting the findings</h3><div className="grid sm:grid-cols-2 gap-3">{result.sources.map((s, i) => { const Icon = sourceIcon(s.sourceType); return <a key={i} href={s.url} target="_blank" rel="noreferrer" className="block rounded-2xl border border-slate-200 dark:border-slate-800 p-4 hover:border-violet-400 transition-colors"><div className="flex gap-2"><Icon className="w-4 h-4 text-violet-500 shrink-0 mt-0.5" /><div className="min-w-0"><div className="font-bold text-sm line-clamp-2 text-slate-900 dark:text-white">{s.title}</div><div className="mt-1 text-[10px] uppercase font-bold text-slate-400">{s.sourceType} · {s.displayLink || "source"}</div><p className="mt-2 text-xs text-slate-500 line-clamp-3">{s.snippet}</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-violet-600">Open source <ExternalLink className="w-3 h-3" /></span></div></div></a> })}</div></section>}
+
+            {result.analysts?.length > 0 && <section><h3 className="font-black text-slate-900 dark:text-white mb-3">AI research team</h3><div className="grid sm:grid-cols-3 gap-3">{result.analysts.map((a, i) => <div key={i} className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4"><div className="text-xs font-black uppercase text-violet-600 dark:text-violet-300">{a.role}</div><div className="mt-2 text-[11px] text-slate-500 break-all">{a.model}</div><div className="mt-2 text-xs font-bold text-slate-700 dark:text-slate-300">{a.findingCount} candidate findings</div></div>)}</div></section>}
+
+            {result.relatedSources?.length > 0 && <details><summary className="cursor-pointer font-bold text-sm text-slate-700 dark:text-slate-300">Other related sources ({result.relatedSources.length})</summary><div className="mt-3 space-y-2">{result.relatedSources.map((s, i) => <a key={i} href={s.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-950 text-xs hover:bg-slate-100 dark:hover:bg-slate-800"><ExternalLink className="w-3.5 h-3.5 shrink-0" /><span className="line-clamp-2">{s.title}</span></a>)}</div></details>}
+          </div>}
+        </div>
+      </section>
+    </div>}
+  </>;
+};
