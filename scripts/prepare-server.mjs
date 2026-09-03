@@ -23,32 +23,13 @@ source = source.replace(
   '// Production authentication is handled by Firebase Auth on the client.\n\n// Health Check'
 );
 
-// Register the deep-research fallback without changing the existing search API.
+// Import the deep-research route implementation into the generated production server.
 if (!source.includes('registerDeepResearchRoutes')) {
   source = source.replace(
     'import { INITIAL_THESES, POPULAR_TOPICS, CATEGORIES_LIST, RARE_DISCOVERY_IDEAS } from "./src/data/thesesData.js";',
     'import { INITIAL_THESES, POPULAR_TOPICS, CATEGORIES_LIST, RARE_DISCOVERY_IDEAS } from "./src/data/thesesData.js";\nimport { registerDeepResearchRoutes } from "./server/deepResearch.js";'
   );
-  source = source.replace(
-    'app.use(express.json({ limit: "1mb" }));',
-    'app.use(express.json({ limit: "1mb" }));\n\nregisterDeepResearchRoutes(app);'
-  );
 }
-
-// Replace legacy hard-coded production URL references.
-source = source.replaceAll("https://thesisverse.org", "https://thesisverse.dpdns.org");
-
-// Use OpenRouter's current free-model router instead of relying on individual free model IDs
-// that can change or become unavailable. The router selects an available free model and
-// supports the same chat-completions interface used by ThesisVerse.
-source = source.replace(
-  'let preferredModel = "meta-llama/llama-3.3-70b-instruct:free";',
-  'let preferredModel = "openrouter/free";'
-);
-source = source.replace(
-  /const openRouterModelsToTry = Array\.from\(new Set\(\[[\s\S]*?\]\)\);/,
-  'const openRouterModelsToTry = [preferredModel];'
-);
 
 // Harden the Express boundary and allow the static frontend to call the API.
 source = source.replace(
@@ -83,6 +64,29 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json({ limit: "1mb" }));`
+);
+
+// Register after body parsing so POST /api/deep-research can read req.body.
+if (!source.includes('registerDeepResearchRoutes(app);')) {
+  source = source.replace(
+    'app.use(express.json({ limit: "1mb" }));',
+    'app.use(express.json({ limit: "1mb" }));\n\nregisterDeepResearchRoutes(app);'
+  );
+}
+
+// Replace legacy hard-coded production URL references.
+source = source.replaceAll("https://thesisverse.org", "https://thesisverse.dpdns.org");
+
+// Use OpenRouter's current free-model router instead of relying on individual free model IDs
+// that can change or become unavailable. The router selects an available free model and
+// supports the same chat-completions interface used by ThesisVerse.
+source = source.replace(
+  'let preferredModel = "meta-llama/llama-3.3-70b-instruct:free";',
+  'let preferredModel = "openrouter/free";'
+);
+source = source.replace(
+  /const openRouterModelsToTry = Array\.from\(new Set\(\[[\s\S]*?\]\)\);/,
+  'const openRouterModelsToTry = [preferredModel];'
 );
 
 fs.writeFileSync(outputPath, source);
