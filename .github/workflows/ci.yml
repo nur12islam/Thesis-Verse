@@ -28,5 +28,8 @@ jobs:
       - name: Typecheck
         run: npm run lint
 
-      - name: Production build
+      - name: Production client build
+        run: npm run build:client
+
+      - name: Production full-stack build
         run: npm run build
