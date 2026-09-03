@@ -11,6 +11,12 @@ source = source.replace(
   'const PORT = Number(process.env.PORT) || 3000;'
 );
 
+// Ensure the production server is reachable from Render's public network interface.
+source = source.replace(
+  /app\.listen\(PORT,\s*\(\) =>/,
+  'app.listen(PORT, "0.0.0.0", () =>'
+);
+
 // Remove the obsolete demo OAuth endpoints. Authentication is handled by Firebase in the client.
 source = source.replace(
   /\/\/ OAuth Auth URL Endpoint[\s\S]*?\/\/ Health Check/,
@@ -42,7 +48,22 @@ app.use((req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "DENY");
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=());
+  const origin = req.get("Origin");
+  const allowedOrigins = new Set([
+    "https://thesisverse.dpdns.org",
+    "https://thesis-verse-site.onrender.com",
+    "https://thesis-verse.onrender.com",
+    "http://localhost:5173",
+    "http://localhost:3000",
+  ]);
+  if (origin && allowedOrigins.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  }
+  if (req.method === "OPTIONS") return res.sendStatus(204);
   next();
 });
 
