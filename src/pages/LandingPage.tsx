@@ -6,7 +6,6 @@ interface LandingPageProps { rareTheses: Thesis[]; onSearchTopic: (topic: string
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onSearchTopic, setActiveTab }) => {
   const [query, setQuery] = React.useState("");
-  const examples = ["Baul song", "AI in education", "Lalon songs", "women in Bengali theatre"];
   const openSearch = (value: string) => { const clean = value.trim(); if (!clean) return; onSearchTopic(clean); setActiveTab("research-explorer"); };
   return <div className="pb-16">
     <section className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white px-6 py-16 dark:border-slate-800 dark:bg-slate-950 sm:px-10 sm:py-24 lg:px-16">
@@ -16,10 +15,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSearchTopic, setActi
         <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-slate-950 dark:text-white sm:text-6xl">Start with an idea.<span className="block text-indigo-600 dark:text-indigo-400">We map the research.</span></h1>
         <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-slate-500 dark:text-slate-400 sm:text-base">Type a topic, even just two or three words. Find existing theses and research, understand the evidence, compare independent AI analyses, and uncover promising gaps.</p>
         <form onSubmit={(e) => { e.preventDefault(); openSearch(query); }} className="mx-auto mt-8 max-w-3xl rounded-2xl border border-slate-200 bg-slate-50 p-2 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:flex">
-          <div className="flex min-w-0 flex-1 items-center px-3"><Search className="mr-3 h-5 w-5 shrink-0 text-slate-400" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Try: Baul song" aria-label="Research topic" className="w-full bg-transparent py-3 text-sm outline-none placeholder:text-slate-400 dark:text-white" /></div>
-          <button className="mt-2 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 text-sm font-bold text-white hover:bg-indigo-700 sm:mt-0 sm:w-auto">Explore research <ArrowRight className="h-4 w-4" /></button>
+          <div className="flex min-w-0 flex-1 items-center px-3"><Search className="mr-3 h-5 w-5 shrink-0 text-slate-400" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search for a topic or research question" aria-label="Research topic" className="w-full bg-transparent py-3 text-sm outline-none placeholder:text-slate-400 dark:text-white" /></div>
+          <button className="mt-2 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 text-sm font-bold text-white hover:bg-indigo-700 sm:mt-0 sm:w-auto">Search <ArrowRight className="h-4 w-4" /></button>
         </form>
-        <div className="mt-4 flex flex-wrap justify-center gap-2"><span className="px-2 py-2 text-xs text-slate-400">Try:</span>{examples.map((x) => <button key={x} onClick={() => openSearch(x)} className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-indigo-400 hover:text-indigo-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">{x}</button>)}</div>
       </div>
     </section>
     <section className="mx-auto mt-8 grid max-w-5xl gap-4 md:grid-cols-3">
