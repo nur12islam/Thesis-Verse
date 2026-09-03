@@ -1,5 +1,6 @@
 import React, {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
+import './services/apiBase';
 import App from './App.tsx';
 import './index.css';
 import './proposal-theme.css';
