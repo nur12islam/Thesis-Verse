@@ -6,6 +6,21 @@ import { auth, db, googleProvider, signInWithPopup, createUserWithEmailAndPasswo
 interface AuthPageProps { onLoginSuccess: (user: UserProfile) => void; setActiveTab: (tab: string) => void; }
 const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250";
 
+const localProfile = (fbUser: FirebaseUser, extraData?: { name?: string; department?: string }): UserProfile => ({
+  id: fbUser.uid,
+  name: extraData?.name || fbUser.displayName || (fbUser.email ? fbUser.email.split("@")[0] : "Academic Scholar"),
+  email: fbUser.email || "",
+  avatar: fbUser.photoURL || DEFAULT_AVATAR,
+  role: "Literature Researcher",
+  universityAffiliation: "",
+  researchBranch: extraData?.department || "Comparative Literature & Hermeneutics",
+  bio: "",
+  orcid: "",
+  savedCount: 0,
+  theme: "dark",
+  citationFormatPreference: "MLA",
+});
+
 export const AuthPage: React.FC<AuthPageProps> = ({ onLoginSuccess, setActiveTab }) => {
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [email, setEmail] = useState("");
@@ -17,27 +32,34 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLoginSuccess, setActiveTab
   const [isLoading, setIsLoading] = useState(false);
 
   const buildProfile = async (fbUser: FirebaseUser, extraData?: { name?: string; department?: string }): Promise<UserProfile> => {
-    const userRef = doc(db, "users", fbUser.uid);
-    const snap = await getDoc(userRef);
-    if (snap.exists()) {
-      const data = snap.data();
-      return {
-        id: fbUser.uid, name: data.name || fbUser.displayName || "Academic Researcher", email: fbUser.email || "",
-        avatar: data.avatar || fbUser.photoURL || DEFAULT_AVATAR, role: data.role || "Literature Researcher",
-        universityAffiliation: data.universityAffiliation || "", researchBranch: data.researchBranch || "Comparative Literature & Hermeneutics",
-        bio: data.bio || "", orcid: data.orcid || "", savedCount: Number(data.savedCount || 0),
-        theme: data.theme === "light" ? "light" : "dark",
-        citationFormatPreference: ["APA", "Chicago", "BibTeX"].includes(data.citationFormatPreference) ? data.citationFormatPreference : "MLA",
-      };
+    const fallback = localProfile(fbUser, extraData);
+    try {
+      const userRef = doc(db, "users", fbUser.uid);
+      const snap = await getDoc(userRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        return {
+          ...fallback,
+          name: data.name || fallback.name,
+          avatar: data.avatar || fallback.avatar,
+          role: data.role || fallback.role,
+          universityAffiliation: data.universityAffiliation || "",
+          researchBranch: data.researchBranch || fallback.researchBranch,
+          bio: data.bio || "",
+          orcid: data.orcid || "",
+          savedCount: Number(data.savedCount || 0),
+          theme: data.theme === "light" ? "light" : "dark",
+          citationFormatPreference: ["APA", "Chicago", "BibTeX"].includes(data.citationFormatPreference) ? data.citationFormatPreference : "MLA",
+        };
+      }
+      await setDoc(userRef, { ...fallback, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+      return fallback;
+    } catch (firestoreError) {
+      // Authentication must not fail just because the optional profile database is
+      // temporarily unavailable, hidden, offline, or blocked by its rules.
+      console.warn("ThesisVerse Firestore profile sync skipped:", firestoreError);
+      return fallback;
     }
-    const profile: UserProfile = {
-      id: fbUser.uid, name: extraData?.name || fbUser.displayName || (fbUser.email ? fbUser.email.split("@")[0] : "Academic Scholar"), email: fbUser.email || "",
-      avatar: fbUser.photoURL || DEFAULT_AVATAR, role: "Literature Researcher", universityAffiliation: "",
-      researchBranch: extraData?.department || "Comparative Literature & Hermeneutics", bio: "", orcid: "", savedCount: 0,
-      theme: "dark", citationFormatPreference: "MLA",
-    };
-    await setDoc(userRef, { ...profile, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
-    return profile;
   };
 
   const finishLogin = (profile: UserProfile) => {
@@ -106,7 +128,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLoginSuccess, setActiveTab
       </form>
       <div className="text-center pt-2"><button onClick={() => { setIsRegisterMode(v => !v); setErrorMsg(""); setAuthStatus(""); }} className="text-xs tv-accent hover:underline font-semibold">{isRegisterMode ? "Already have an account? Sign in" : "Don't have an account? Register here"}</button></div>
       <div className="pt-2 flex items-center justify-center gap-1.5 text-[11px] text-slate-400"><ShieldCheck className="w-3.5 h-3.5 tv-accent" /><span>Firebase Authentication + owner-scoped Firestore</span></div>
-      {/* Deployment marker: current production auth UI has no legacy database-status message. */}
     </div>
   );
 };
