@@ -1,9 +1,10 @@
-import React, {StrictMode} from 'react';
+import React, {StrictMode, Suspense} from 'react';
 import {createRoot} from 'react-dom/client';
-import App from './App.tsx';
 import './index.css';
 import './proposal-theme.css';
 import './accessibility.css';
+
+const App = React.lazy(() => import('./App.tsx'));
 
 class AppErrorBoundary extends React.Component<
   React.PropsWithChildren,
@@ -38,10 +39,17 @@ class AppErrorBoundary extends React.Component<
   }
 }
 
+window.addEventListener('vite:preloadError', (event) => {
+  event.preventDefault();
+  window.location.reload();
+});
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AppErrorBoundary>
-      <App />
+      <Suspense fallback={<main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#f7f8f5', color: '#65775a', fontFamily: 'system-ui, sans-serif', fontWeight: 700 }}>Loading ThesisVerse…</main>}>
+        <App />
+      </Suspense>
     </AppErrorBoundary>
   </StrictMode>,
 );
