@@ -26,9 +26,91 @@
     <link rel="manifest" href="/manifest.json" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <style>
+      #tv-search-progress {
+        display: none;
+        max-width: 760px;
+        margin: 24px auto 0;
+        padding: 22px 24px;
+        border: 1px solid rgba(99,102,241,.18);
+        border-radius: 20px;
+        background: rgba(255,255,255,.94);
+        box-shadow: 0 14px 40px rgba(15,23,42,.08);
+        text-align: left;
+      }
+      .dark #tv-search-progress { background: rgba(15,23,42,.94); border-color: rgba(129,140,248,.22); }
+      #tv-search-progress.tv-visible { display: block; animation: tvProgressIn .25s ease-out; }
+      .tv-progress-title { font-weight: 800; font-size: 15px; color: #0f172a; }
+      .dark .tv-progress-title { color: #f8fafc; }
+      .tv-progress-subtitle { margin-top: 4px; font-size: 12px; color: #64748b; }
+      .tv-progress-list { position: relative; margin-top: 18px; padding-left: 30px; }
+      .tv-progress-list::before { content: ""; position: absolute; left: 9px; top: 9px; bottom: 9px; width: 2px; background: linear-gradient(to bottom, #6366f1, rgba(99,102,241,.12)); }
+      .tv-progress-step { position: relative; display: flex; align-items: center; min-height: 34px; gap: 11px; font-size: 13px; color: #94a3b8; transition: color .25s ease; }
+      .tv-progress-step::before { content: ""; position: absolute; left: -26px; width: 10px; height: 10px; border-radius: 999px; background: #cbd5e1; border: 2px solid #fff; box-sizing: border-box; z-index: 1; }
+      .dark .tv-progress-step::before { border-color: #0f172a; background: #475569; }
+      .tv-progress-step.tv-active { color: #4f46e5; font-weight: 700; }
+      .dark .tv-progress-step.tv-active { color: #a5b4fc; }
+      .tv-progress-step.tv-active::before { background: #6366f1; box-shadow: 0 0 0 5px rgba(99,102,241,.12); animation: tvPulse 1.2s infinite; }
+      .tv-progress-step.tv-done { color: #475569; }
+      .dark .tv-progress-step.tv-done { color: #94a3b8; }
+      .tv-progress-step.tv-done::before { background: #10b981; }
+      .tv-progress-step.tv-done::after { content: "✓"; position: absolute; left: -25px; top: 8px; color: #fff; font-size: 7px; font-weight: 900; z-index: 2; }
+      .tv-progress-bar { height: 4px; margin-top: 18px; overflow: hidden; border-radius: 999px; background: #e2e8f0; }
+      .dark .tv-progress-bar { background: #1e293b; }
+      .tv-progress-bar > span { display: block; width: 18%; height: 100%; border-radius: inherit; background: #6366f1; animation: tvBar 1.7s ease-in-out infinite; }
+      @keyframes tvProgressIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes tvPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+      @keyframes tvBar { 0% { transform: translateX(-120%); } 100% { transform: translateX(560%); } }
+    </style>
   </head>
   <body class="bg-slate-50 dark:bg-slate-950 transition-colors">
     <div id="root"></div>
+    <div id="tv-search-progress" aria-live="polite" aria-label="Research search progress">
+      <div class="tv-progress-title">Building your research map…</div>
+      <div class="tv-progress-subtitle">Searching sources, checking the evidence, and preparing the analysis.</div>
+      <div class="tv-progress-list">
+        <div class="tv-progress-step">Searching your topic</div>
+        <div class="tv-progress-step">Checking scholarly sources</div>
+        <div class="tv-progress-step">Comparing and removing duplicate records</div>
+        <div class="tv-progress-step">Running AI research analysis</div>
+        <div class="tv-progress-step">Preparing your research map</div>
+      </div>
+      <div class="tv-progress-bar"><span></span></div>
+    </div>
+    <script>
+      (() => {
+        const panel = document.getElementById('tv-search-progress');
+        if (!panel) return;
+        const steps = [...panel.querySelectorAll('.tv-progress-step')];
+        let timer = null;
+        let index = 0;
+        const reset = () => steps.forEach((s) => s.classList.remove('tv-active', 'tv-done'));
+        const show = () => {
+          reset();
+          index = 0;
+          panel.classList.add('tv-visible');
+          steps[0]?.classList.add('tv-active');
+          clearInterval(timer);
+          timer = setInterval(() => {
+            if (index < steps.length - 1) {
+              steps[index]?.classList.remove('tv-active');
+              steps[index]?.classList.add('tv-done');
+              index += 1;
+              steps[index]?.classList.add('tv-active');
+            }
+          }, 1100);
+        };
+        const hide = () => {
+          panel.classList.remove('tv-visible');
+          clearInterval(timer);
+          timer = null;
+        };
+        const isSearchLoading = () => [...document.querySelectorAll('button[disabled]')].some((b) => /search/i.test(b.textContent || '') && b.querySelector('svg'));
+        const observer = new MutationObserver(() => isSearchLoading() ? (panel.classList.contains('tv-visible') || show()) : (panel.classList.contains('tv-visible') && hide()));
+        observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['disabled', 'class'] });
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
