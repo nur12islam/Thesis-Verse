@@ -8,7 +8,7 @@ import { ThesisDetailModal } from "./components/ThesisDetailModal";
 import { auth, onAuthStateChanged, db, doc, getDoc } from "./lib/firebase";
 import { LandingPage } from "./pages/LandingPage";
 import { SearchPage } from "./pages/SearchPage";
-import { ResearchExplorerPage } from "./pages/ResearchExplorerPage";
+import { AdvancedResearchExplorerPage } from "./pages/AdvancedResearchExplorerPage";
 import { RareDiscoveryPage } from "./pages/RareDiscoveryPage";
 import { ProposalBuilderPage } from "./pages/ProposalBuilderPage";
 import { ComparePage } from "./pages/ComparePage";
@@ -57,17 +57,16 @@ export default function App() {
   const rareThesesList: Thesis[] = [INITIAL_THESES[0], INITIAL_THESES[1], INITIAL_THESES[3], INITIAL_THESES[4], INITIAL_THESES[5]];
 
   return <div className="min-h-screen bg-slate-100/60 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white transition-colors">
-    <Navbar activeTab={activeTab} setActiveTab={setActiveTab} savedCount={savedTheses.length} compareCount={comparedTheses.length} searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearchSubmit={() => { handleSearchTopic(searchQuery); setActiveTab("search"); }} isDarkMode={isDarkMode} onToggleTheme={toggleTheme} currentUser={currentUser} />
+    <Navbar activeTab={activeTab} setActiveTab={setActiveTab} savedCount={savedTheses.length} compareCount={comparedTheses.length} searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearchSubmit={() => { handleSearchTopic(searchQuery); setActiveTab("research-explorer"); }} isDarkMode={isDarkMode} onToggleTheme={toggleTheme} currentUser={currentUser} />
     <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
       {activeTab === "landing" && <LandingPage rareTheses={rareThesesList} onSearchTopic={handleSearchTopic} onSearchCategory={handleSearchTopic} setActiveTab={setActiveTab} savedIds={savedIds} comparedIds={comparedIds} onToggleSave={handleToggleSave} onToggleCompare={handleToggleCompare} onSelectDetails={setSelectedDetailsThesis} onBuildProposal={handleBuildProposal} onCite={handleCiteQuick} />}
-      {activeTab === "research-explorer" && <ResearchExplorerPage initialQuery={searchQuery} onShowToast={addToast} />}
-      {activeTab === "search" && <SearchPage initialQuery={searchQuery} savedIds={savedIds} comparedIds={comparedIds} onToggleSave={handleToggleSave} onToggleCompare={handleToggleCompare} onSelectDetails={setSelectedDetailsThesis} onBuildProposal={handleBuildProposal} onCite={handleCiteQuick} onShowToast={addToast} />}
+      {(activeTab === "research-explorer" || activeTab === "search") && <AdvancedResearchExplorerPage initialQuery={searchQuery} onShowToast={addToast} />}
       {activeTab === "rare" && <RareDiscoveryPage savedIds={savedIds} onToggleSave={handleToggleSave} onBuildProposal={handleBuildProposal} onShowToast={addToast} />}
       {activeTab === "proposal" && <ProposalBuilderPage initialThesis={proposalInitialThesis} onShowToast={addToast} />}
       {activeTab === "compare" && <ComparePage comparedTheses={comparedTheses} onRemoveCompare={handleToggleCompare} onClearCompare={() => setComparedTheses([])} onSelectDetails={setSelectedDetailsThesis} onShowToast={addToast} />}
       {activeTab === "library" && <LibraryPage currentUser={currentUser} savedTheses={savedTheses} comparedIds={comparedIds} onToggleSave={handleToggleSave} onToggleCompare={handleToggleCompare} onSelectDetails={setSelectedDetailsThesis} onBuildProposal={handleBuildProposal} onCite={handleCiteQuick} onShowToast={addToast} />}
       {activeTab === "chat" && <AiChatPage savedTheses={savedTheses} onShowToast={addToast} />}
-      {activeTab === "profile" && <ProfilePage user={currentUser} setUser={setCurrentUser} searchHistory={searchHistory} onClearHistory={handleClearHistory} onSearchTopic={(q) => { handleSearchTopic(q); setActiveTab("search"); }} setActiveTab={setActiveTab} isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />}
+      {activeTab === "profile" && <ProfilePage user={currentUser} setUser={setCurrentUser} searchHistory={searchHistory} onClearHistory={handleClearHistory} onSearchTopic={(q) => { handleSearchTopic(q); setActiveTab("research-explorer"); }} setActiveTab={setActiveTab} isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />}
       {activeTab === "auth" && <AuthPage onLoginSuccess={(u) => { setCurrentUser(u); addToast("Welcome back!", `Logged in as ${u.name}`, "success"); }} setActiveTab={setActiveTab} />}
       {activeTab === "ai-tools" && <AiResearchToolsPage savedTheses={savedTheses} comparedTheses={comparedTheses} onRemoveCompare={handleToggleCompare} onClearCompare={() => setComparedTheses([])} onSelectDetails={setSelectedDetailsThesis} onShowToast={addToast} />}
       {activeTab === "rabbit" && <ResearchRabbitPage initialSeedThesis={rabbitSeedThesis} savedIds={savedIds} onToggleSave={handleToggleSave} onBuildProposal={handleBuildProposal} onShowToast={addToast} />}
