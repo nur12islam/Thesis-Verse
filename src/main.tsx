@@ -4,7 +4,6 @@ import App from './App.tsx';
 import './index.css';
 import './proposal-theme.css';
 import './accessibility.css';
-import './runtime';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
