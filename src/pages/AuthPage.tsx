@@ -106,6 +106,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onLoginSuccess, setActiveTab
       </form>
       <div className="text-center pt-2"><button onClick={() => { setIsRegisterMode(v => !v); setErrorMsg(""); setAuthStatus(""); }} className="text-xs tv-accent hover:underline font-semibold">{isRegisterMode ? "Already have an account? Sign in" : "Don't have an account? Register here"}</button></div>
       <div className="pt-2 flex items-center justify-center gap-1.5 text-[11px] text-slate-400"><ShieldCheck className="w-3.5 h-3.5 tv-accent" /><span>Firebase Authentication + owner-scoped Firestore</span></div>
+      {/* Deployment marker: current production auth UI has no legacy database-status message. */}
     </div>
   );
 };
